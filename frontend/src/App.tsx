@@ -18,7 +18,6 @@ export default function App() {
   const theme = useAppSelector((state) => state.aside.theme);
   const username = useAppSelector((state) => state.aside.username);
   const dispatch = useAppDispatch();
-  const version = "1.0.0";
 
   const combineDarkTheme = {
     ...darkTheme,
@@ -31,7 +30,6 @@ export default function App() {
   };
 
   useEffect(() => {
-    console.log(version);
     dispatch(fetchSettings());
   }, []);
 

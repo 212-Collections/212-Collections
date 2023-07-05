@@ -1,4 +1,4 @@
-import { Button, Typography } from "antd";
+import { Typography } from "antd";
 import Options from "./Options";
 import Avatar from "../../media/avatar/Avatar";
 

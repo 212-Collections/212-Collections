@@ -19,7 +19,7 @@ function createWindow() {
   // backendProcess = spawn("node", ["./backend/server.js"]);
   backendProcess = spawn("node", ["./resources/app/backend/server.js"]);
   backendProcess.stdout.on("data", (data) => {
-    console.log(`Sortie du backend : ${data}`);
+    console.log(`Backend output : ${data}`);
     if (!ready) {
       win.loadFile("./frontend/index.html");
       ready = true;
@@ -27,7 +27,7 @@ function createWindow() {
   });
 
   backendProcess.stderr.on("data", (data) => {
-    console.error(`Erreur du backend : ${data}`);
+    console.error(`Backend error : ${data}`);
 
     dialog.showMessageBox({
       type: "info",

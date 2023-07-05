@@ -117,19 +117,6 @@ export default function CollectionModal() {
         name={"collection_modal"}
         onFinish={submit}
       >
-        {/* <Form.Item
-          name="name"
-          label="Name"
-          rules={[
-            {
-              required: true,
-              message: "Name is required",
-            },
-          ]}
-          tooltip="The name of the new collection"
-        >
-          <Input maxLength={32} allowClear />
-        </Form.Item> */}
         <div id="title">
           {avatarData.data === null || avatarData.data === "" ? (
             <Button

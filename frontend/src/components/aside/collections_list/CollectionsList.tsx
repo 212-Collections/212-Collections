@@ -1,13 +1,10 @@
 import { useEffect } from "react";
-import { Button } from "antd";
 import { useAppSelector, useAppDispatch } from "../../../redux/store";
-import { setCollectionModal } from "../../../redux/reducers/modal";
 import {
   fetchList,
   setCollectionList,
   sortCollection,
 } from "../../../redux/reducers/list";
-import { PlusOutlined } from "@ant-design/icons";
 import CollectionItem from "../collection_item/CollectionItem";
 import {
   DndContext,
@@ -23,15 +20,10 @@ import {
   arrayMove,
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
-import { CollectionType } from "../../../types/types";
 
 export default function CollectionsList() {
   const dispatch = useAppDispatch();
   const { collections } = useAppSelector((state) => state.list);
-
-  // useEffect(() => {
-  //   console.log(collections);
-  // }, [collections]);
 
   useEffect(() => {
     const fetchCollections = async () => {
@@ -72,8 +64,6 @@ export default function CollectionsList() {
   );
 
   if (!(collections.length >= 1)) return null;
-  
-  
 
   return (
     <DndContext

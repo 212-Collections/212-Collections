@@ -1,6 +1,4 @@
-import { Button, Card, Checkbox, Divider, Space, Tag, Typography } from "antd";
-import { EditOutlined } from "@ant-design/icons";
-import Avatar from "../../media/avatar/Avatar";
+import { Card, Checkbox, Divider, Tag, Typography } from "antd";
 import Image from "../../media/image/Image";
 import ReactMarkdown from "react-markdown";
 import { ElementType, ReactNode } from "react";
@@ -103,24 +101,6 @@ export default function ItemArticle({
         bordered={false}
         style={{ marginBottom: "32px" }}
         title={
-          // <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-          //   <Typography.Title
-          //     ellipsis
-          //     level={3}
-          //     style={{ flex: "auto", margin: 0, flexGrow: 0 }}
-          //   >
-          //     {title}
-          //   </Typography.Title>
-          //   <Typography.Text type="secondary" style={{ flexGrow: 1 }}>
-          //     {version}
-          //   </Typography.Text>
-          //   <Button
-          //     style={{ flexShrink: 0 }}
-          //     type="text"
-          //     onClick={editItem}
-          //     icon={<EditOutlined />}
-          //   />
-          // </div>
           <Title
             title={title}
             version={version}
@@ -133,7 +113,12 @@ export default function ItemArticle({
         {image?.data && image.data !== "" ? (
           <div style={{ marginBottom: "16px" }}>
             {image ? (
-              <Image preview={false} size={150} sizeType="height" image={image} />
+              <Image
+                preview={false}
+                size={150}
+                sizeType="height"
+                image={image}
+              />
             ) : null}
           </div>
         ) : null}

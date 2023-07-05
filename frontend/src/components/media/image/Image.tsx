@@ -24,7 +24,7 @@ export default function Image({
       height={sizeType === "height" ? (size ? size : "100%") : "auto"}
       src={data}
       preview={preview}
-      fallback="https://cdn.discordapp.com/attachments/822787638615474176/1118531356289404938/no-image.svg"
+      fallback="https://raw.githubusercontent.com/212-Collections/Branding/main/resources/no_image.svg"
       alt="avatar"
     />
   );

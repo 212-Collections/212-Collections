@@ -1,5 +1,3 @@
-const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
 const Setting = require("../models/settings");
 
 function api(fastify, opts, next) {

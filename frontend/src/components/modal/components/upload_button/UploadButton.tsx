@@ -7,7 +7,6 @@ import type {
   UploadFile,
   UploadProps,
 } from "antd/es/upload/interface";
-import { useAppSelector } from "../../../../redux/store";
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();

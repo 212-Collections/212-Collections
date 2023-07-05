@@ -1,6 +1,4 @@
-import { Button, Card, Checkbox, Divider, Tag, Typography } from "antd";
-import { EditOutlined } from "@ant-design/icons";
-import Avatar from "../../media/avatar/Avatar";
+import { Card, Checkbox, Divider, Tag, Typography } from "antd";
 import Image from "../../media/image/Image";
 import ReactMarkdown from "react-markdown";
 import { ElementType, ReactNode } from "react";

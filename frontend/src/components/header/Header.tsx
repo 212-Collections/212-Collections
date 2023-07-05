@@ -1,22 +1,9 @@
-import {
-  Button,
-  Dropdown,
-  Layout,
-  Popconfirm,
-  Select,
-  Typography,
-  theme,
-} from "antd";
+import { Button, Select, Typography, theme } from "antd";
 import { CollectionType } from "../../types/types";
 import { useAppDispatch } from "../../redux/store";
 import { setCollectionModal, setItemModal } from "../../redux/reducers/modal";
 import { updateCollection } from "../../redux/reducers/collection";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  MoreOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import Avatar from "../media/avatar/Avatar";
 import { deleteCollection } from "../../redux/reducers/list";
 import Options from "../item/components/Options";

@@ -1,8 +1,6 @@
 import { Button, Popover } from "antd";
 import data from "@emoji-mart/data/sets/14/twitter.json";
-import ImgCrop from "antd-img-crop";
 import Picker from "@emoji-mart/react";
-import { current } from "@reduxjs/toolkit";
 import { useAppSelector } from "../../../../redux/store";
 
 interface EmojiSelectorProps {

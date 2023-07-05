@@ -1,15 +1,13 @@
 import { Button, Divider, Layout, theme } from "antd";
-import { HomeOutlined, PlusOutlined, SwapOutlined } from "@ant-design/icons";
+import { HomeOutlined, PlusOutlined } from "@ant-design/icons";
 import { setPage, setTheme } from "../../redux/reducers/aside";
 import { useAppSelector, useAppDispatch } from "../../redux/store";
 import CollectionsList from "./collections_list/CollectionsList";
 import { setCollectionModal } from "../../redux/reducers/modal";
-import { useEffect } from "react";
 
 export default function Aside() {
   const dispatch = useAppDispatch();
   const currentTheme = useAppSelector((state) => state.aside.theme);
-
 
   const {
     token: { colorBgContainer, colorFillTertiary, colorFillQuaternary },

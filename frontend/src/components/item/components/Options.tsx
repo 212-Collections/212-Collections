@@ -1,6 +1,6 @@
 import { DeleteOutlined, EditOutlined, MoreOutlined } from "@ant-design/icons";
 import { Button, Dropdown, Popconfirm } from "antd";
-import { useEffect, useRef, useState } from "react";
+import {  useState } from "react";
 
 export default function Options({ editFunction, deleteFunction, type }: any) {
   const [confirmVisible, setConfirmVisible] = useState(false);

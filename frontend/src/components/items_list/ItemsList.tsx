@@ -1,4 +1,3 @@
-import { useAppDispatch } from "../../redux/store";
 import ItemCard from "../item/item_card/ItemCard";
 import Article from "../item/item_article/ItemArticle";
 import { CollectionType, ItemType } from "../../types/types";
@@ -9,7 +8,6 @@ export default function ItemsList({
 }: {
   collection: CollectionType;
 }) {
-  const dispatch = useAppDispatch();
 
   if (!collection) return null;
 

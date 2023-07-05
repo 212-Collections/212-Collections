@@ -12,9 +12,6 @@ function api(fastify, opts, next) {
         "uploads",
         "item_icon" + path.extname(data.filename)
       );
-    //   if (fs.existsSync(uploadPath)) {
-    //     fs.unlinkSync(uploadPath);
-    //   }
       const stream = fs.createWriteStream(uploadPath);
       await new Promise((resolve, reject) => {
         data.file

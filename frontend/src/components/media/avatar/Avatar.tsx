@@ -1,5 +1,5 @@
 import { Image } from "antd";
-import { AvatarType, ImageType } from "../../../types/types";
+import { AvatarType } from "../../../types/types";
 
 export default function Avatar({
   image,
@@ -11,10 +11,9 @@ export default function Avatar({
   if (!image || !image.data || image.data === "") return <></>;
   const img = (
     <Image
-      // style={{ "--size": size + "px" || "100px"}}
       preview={false}
       src={image.data}
-      fallback="https://cdn.discordapp.com/attachments/822787638615474176/1118531356289404938/no-image.svg"
+      fallback="https://raw.githubusercontent.com/212-Collections/Branding/main/resources/no_image.svg"
       alt="avatar"
       sizes={size + "px" || "100px"}
     />
