@@ -4,6 +4,7 @@ import { setPage, setTheme } from "../../redux/reducers/aside";
 import { useAppSelector, useAppDispatch } from "../../redux/store";
 import CollectionsList from "./collections_list/CollectionsList";
 import { setCollectionModal } from "../../redux/reducers/modal";
+import Icon from "../media/icon/Icon";
 
 export default function Aside() {
   const dispatch = useAppDispatch();
@@ -26,7 +27,7 @@ export default function Aside() {
   }
 
   const LightIcon = (
-    <span className="anticon" role="img">
+    <span className="anticon" role="img" style={{overflow: "visible"}}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="1em"
@@ -89,7 +90,7 @@ export default function Aside() {
   );
 
   const darkIcon = (
-    <span className="anticon" role="img">
+    <span className="anticon" role="img"  style={{overflow: "visible"}}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="16"
@@ -111,7 +112,7 @@ export default function Aside() {
   );
 
   const homeIcon = (
-    <span className="anticon" role="img">
+    <Icon>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="16"
@@ -127,7 +128,7 @@ export default function Aside() {
         <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
         <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
       </svg>
-    </span>
+    </Icon>
   );
 
   const newIcon = (
@@ -157,21 +158,25 @@ export default function Aside() {
     >
       {" "}
       <div
-        style={currentTheme === "dark" ? {
-          backgroundColor: colorFillQuaternary,
-          height: "100%",
-        } : {}}
+        style={
+          currentTheme === "dark"
+            ? {
+                backgroundColor: colorFillQuaternary,
+                height: "100%",
+              }
+            : {}
+        }
       >
         <div id="buttons">
           <div>
             <Button
               type="primary"
               onClick={setHomePage}
-              icon={<HomeOutlined style={{ fontSize: "16px" }} />}
+              icon={<HomeOutlined style={{ fontSize: "16px", overflow: "visible" }} />}
             />
             <Button
               type="text"
-              icon={<PlusOutlined style={{ fontSize: "22px" }} />}
+              icon={<PlusOutlined style={{ fontSize: "22px", overflow: "visible" }} />}
               // icon={newIcon}
               onClick={() =>
                 dispatch(setCollectionModal({ open: true, type: "new" }))
