@@ -20,6 +20,10 @@
     justify-content: space-between;
     padding: 0 24px;
 
+    * {
+      overflow: visible;
+    }
+
     > div {
       display: flex;
       gap: 16px;
