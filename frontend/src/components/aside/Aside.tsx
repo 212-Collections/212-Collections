@@ -10,7 +10,7 @@ export default function Aside() {
   const currentTheme = useAppSelector((state) => state.aside.theme);
 
   const {
-    token: { colorBgContainer, colorFillTertiary, colorFillQuaternary },
+    token: { colorBgContainer, colorFillQuaternary },
   } = theme.useToken();
 
   function switchTheme() {
@@ -157,7 +157,7 @@ export default function Aside() {
     >
       {" "}
       <div
-        style={currentTheme == "dark" ? {
+        style={currentTheme === "dark" ? {
           backgroundColor: colorFillQuaternary,
           height: "100%",
         } : {}}
