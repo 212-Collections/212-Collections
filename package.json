@@ -1,0 +1,30 @@
+{
+  "name": "212-collections",
+  "version": "1.0.0",
+  "description": "Un logiciel simple et intuitif qui vous permet de créer des collections personnalisées afin de stocker et organiser vos données personnelles dans une interface conviviale avec votre propre base de données en ligne.",
+  "scripts": {
+    "install-frontend": "cd frontend && npm install",
+    "install-backend": "cd backend && npm install",
+    "install-app": "cd app && npm install",
+    "install-all": "npm i && npm-run-all --parallel install-frontend install-backend install-app",
+    "start-backend": "cd backend && npm start",
+    "start-frontend": "cd frontend && npm start",
+    "start-web": "npm-run-all --parallel start-frontend start-backend",
+    "start-app": "cd app && npm start",
+    "build-frontend": "cd frontend && npm run build",
+    "build-app": "cd app && npm run build-all",
+    "build-all": "npm run build-frontend && npm run build-app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pierre-LHOSTE/212-Collections.git"
+  },
+  "author": "vingt-douze",
+  "bugs": {
+    "url": "https://github.com/Pierre-LHOSTE/212-Collections/issues"
+  },
+  "homepage": "https://github.com/Pierre-LHOSTE/212-Collections#readme",
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}

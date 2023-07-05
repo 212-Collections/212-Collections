@@ -1,0 +1,12 @@
+{
+  "colorPrimary": "#7289da",
+  "wireframe": true,
+  "colorPrimaryHover": "#a8b5e6",
+  "colorPrimaryActive": "#6b7fad",
+  "colorPrimaryTextHover": "#a8b5e6",
+  "colorPrimaryText": "#7289da",
+  "colorPrimaryTextActive": "#6b7fad",  
+  "colorInfoTextHover": "#a8b5e6",
+  "colorInfoText": "#7289da",
+  "colorInfoTextActive": "#6b7fad"
+}

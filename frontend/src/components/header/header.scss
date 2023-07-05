@@ -1,0 +1,22 @@
+#header {
+  --height: 69px;
+  height: var(--height);
+  min-height: var(--height);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  > div {
+    gap: 16px;
+    display: flex;
+    align-items: center;
+  }
+
+  .ant-select {
+    min-width: 125px;
+  }
+
+  h3 {
+    margin: 0;
+  }
+}

@@ -1,0 +1,43 @@
+#collections_list .item {
+  display: flex;
+  padding: 16px 32px;
+  padding-left: 24px;
+  cursor: pointer;
+  align-items: center;
+  user-select: none;
+  gap: 16px;
+  transition: background-color .0s ease;
+
+  .ant-typography {
+    line-height: normal;
+    margin: 0;
+    // opacity: 0.65;
+  }
+
+  .avatar {
+    --size: 24px;
+    height: var(--size) !important;
+    width: var(--size) !important;
+    min-width: var(--size) !important;
+    min-height: var(--size) !important;
+    margin-left: 4px;
+  }
+}
+
+.dark #collections_list .item {
+  &:hover {
+    background-color: rgba($color: #fff, $alpha: 0.01);
+  }
+  &.active {
+    background-color: rgba($color: #fff, $alpha: 0.05);
+  }
+}
+
+.light #collections_list .item {
+  &:hover {
+    background-color: rgba($color: #000, $alpha: 0.02);
+  }
+  &.active {
+    background-color: rgba($color: #000, $alpha: 0.03);
+  }
+}

@@ -1,0 +1,52 @@
+@import url("./collection_item/collection_item.scss");
+@import url("./collections_list/collections_list.scss");
+
+#aside {
+  overflow: hidden;
+  * {
+    overflow: hidden;
+  }
+  // width: 250px;
+
+  // > div {
+  //   background-color: white;
+  // }
+
+  #buttons {
+    height: 69px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+
+    > div {
+      display: flex;
+      gap: 16px;
+    }
+  }
+
+  // li:not(:last-child) {
+  //   // margin: 10px;
+  //   // background-color: rgba($color: #ffffff, $alpha: 0.1);
+  //   padding: 16px 32px;
+  //   cursor: pointer;
+  //   user-select: none;
+  //   width: 250px;
+  //   list-style: none;
+
+  //   span {
+  //     font-size: 18px;
+  //   }
+
+  //   &:hover {
+  //     background-color: rgba($color: #000, $alpha: 0.1);
+  //   }
+  //   &.active {
+  //     background-color: rgba($color: #000, $alpha: 0.2);
+  //   }
+  // }
+  // li:last-child {
+  //   margin: 16px 32px;
+  // }
+}

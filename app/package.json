@@ -1,0 +1,23 @@
+{
+  "name": "212-collections-app",
+  "version": "1.0.0",
+  "author": "vingt-douze",
+  "main": "index.js",
+  "homepage": "./",
+  "scripts": {
+    "start": "electron .",
+    "get-frontend": "xcopy /Y /I /E /S \"..\\frontend\\build\\\" \".\\frontend\\\"",
+    "get-backend": "xcopy /I /Y \"..\\backend\\server.js\" \".\\backend\\\" && xcopy /I /Y \"..\\backend\\package.json\" \".\\backend\\\" && xcopy /I /Y \"..\\backend\\models\" \".\\backend\\models\\\" && xcopy /I /Y \"..\\backend\\routes\" \".\\backend\\routes\\\"",
+    "install-backend": "cd backend && npm install",
+    "get-front-back": "npm-run-all --parallel get-frontend get-backend install-backend",
+    "build-win": "electron-packager . 212-Collections --out=../build --icon=./icons/icon.ico --platform=win32 --arch=x64 --overwrite",
+    "build-mac": "electron-packager . 212-Collections --out=../build --icon=./icons/icon.icns --platform=darwin --arch=x64 --overwrite -app-category-type=public.app-category.reference",
+    "build-linux": "electron-packager . 212-Collections --out=../build --icon=./icons/icon.png --platform=linux --arch=x64 --overwrite",
+    "build-all": "npm run get-front-back && npm run build-win"
+  },
+  "devDependencies": {
+    "electron": "^24.0.0",
+    "electron-packager": "^17.1.1",
+    "npm-run-all": "^4.1.5"
+  }
+}

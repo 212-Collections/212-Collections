@@ -1,0 +1,18 @@
+#collection_modal {
+
+  #title {
+    width: 100%;
+    display: flex;
+    align-items: end;
+    gap: 16px;
+    margin-bottom: 24px;
+
+    .ant-form-item {
+      margin-bottom: 0;
+      flex: 1;
+    }
+  }
+  #collection_modal_name_help {
+    position: absolute;
+  }
+}

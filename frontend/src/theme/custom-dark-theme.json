@@ -1,0 +1,17 @@
+{
+  "colorPrimary": "#7289da",
+  "colorBgLayout": "#090a0c",
+  "colorBgLayout": "#101319",
+  "colorBgContainer": "#1a1d23",
+  "wireframe": true,
+  "colorBgElevated": "#1a1d23",
+
+  "colorPrimaryHover": "#a8b5e6",
+  "colorPrimaryActive": "#6b7fad",
+  "colorPrimaryTextHover": "#a8b5e6",
+  "colorPrimaryText": "#7289da",
+  "colorPrimaryTextActive": "#6b7fad",  
+  "colorInfoTextHover": "#a8b5e6",
+  "colorInfoText": "#7289da",
+  "colorInfoTextActive": "#6b7fad"
+}

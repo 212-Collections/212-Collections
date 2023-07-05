@@ -1,0 +1,19 @@
+ {
+    "_id": "5418458",
+    "title": "Protonmail",
+    "image": {
+      "data": "https://mail.proton.me/assets/proton-og-image.png",
+      "render": "smooth",
+      "type": "url"
+    },
+    "icon": {
+      "data": "https://mail.proton.me/assets/apple-touch-icon-57x57.png",
+      "render": "smooth",
+      "border": "rounded",
+      "type": "url"
+    },
+    "description":
+      "Proton Mail est la plus grande messagerie sécurisée, plus de 70 millions d'utilisateurs, sur le web, iOS, Android et ordinateurs, protégée par la loi suisse.",
+    "tags": ["website", "mail", "confidentialité", "securité"],
+    "link": "https://proton.me/fr/mail"
+  }

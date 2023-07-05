@@ -1,0 +1,48 @@
+#item_modal {
+  #footer {
+    width: 100%;
+    display: flex;
+    align-items: end;
+    gap: 16px;
+
+    > * {
+      flex: 1;
+    }
+  }
+
+  #title {
+    width: 100%;
+    display: flex;
+    align-items: end;
+    gap: 16px;
+    margin-bottom: 24px;
+
+    .ant-form-item {
+      margin-bottom: 0;
+
+      &:nth-child(2) {
+        flex: 2;
+      }
+      &:nth-child(3) {
+        flex: 1;
+      }
+    }
+  }
+
+  #link {
+    display: flex;
+    align-items: end;
+    gap: 16px;
+
+    > div {
+      &:first-child {
+        flex: auto;
+      }
+      flex: 0;
+    }
+  }
+
+  #item_modal_title_help {
+    position: absolute;
+  }
+}

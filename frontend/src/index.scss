@@ -1,0 +1,220 @@
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  text-decoration: none;
+}
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+}
+
+@import url("./components/aside/aside.scss");
+@import url("./components/media/avatar/avatar.scss");
+@import url("./components/media/image/image.scss");
+@import url("./components/modal/item_modal/item_modal.scss");
+@import url("./components/modal/modal.scss");
+@import url("./components/modal/image_modal/image_modal.scss");
+@import url("./components/header/header.scss");
+
+.ant-color-picker {
+  * {
+    user-select: none;
+  }
+}
+
+main {
+  border-top-left-radius: 16px;
+}
+
+main {
+  display: flex;
+  padding: 32px;
+
+  > ul {
+    // margin: 32px;
+
+    &.flex {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      justify-content: center;
+    }
+  }
+}
+
+
+.ant-card {
+  // background-color: (var(--dark));
+  h1 {
+    font-size: 18px;
+  }
+  h2 {
+    font-size: 17px;
+  }
+  h3 {
+    font-size: 16px;
+  }
+  h4 {
+    font-size: 15px;
+  }
+  h5 {
+    font-size: 16px;
+  }
+  h6 {
+    font-size: 16px;
+  }
+
+  .ant-card-meta-title,
+  .ant-card-head-title {
+    // margin-top: 4px;
+    .ant-btn {
+      display: none;
+    }
+  }
+
+  &:hover .ant-card-meta-title .ant-btn,
+  &:hover .ant-card-head-title .ant-btn {
+    display: initial;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba($color: #fff, $alpha: 0.04);
+
+  &:hover {
+    background: rgba($color: #fff, $alpha: 0.06);
+  }
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba($color: #fff, $alpha: 0.1);
+  border-radius: 8px;
+  &:hover {
+    background-color: rgba($color: #fff, $alpha: 0.2);
+  }
+}

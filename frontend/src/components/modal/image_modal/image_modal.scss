@@ -1,0 +1,13 @@
+#image_modal {
+    .ant-upload-wrapper {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      .ant-upload-list-item {
+        margin-top: 0;
+      }
+    }
+  
+  }
+  
+  @import url("../components/emoji_selector/emoji_selector.scss");

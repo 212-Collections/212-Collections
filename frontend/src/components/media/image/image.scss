@@ -1,0 +1,8 @@
+.image {
+  &.pixelated img {
+    image-rendering: pixelated;
+  }
+  &.smooth img {
+    image-rendering: smooth;
+  }
+}
