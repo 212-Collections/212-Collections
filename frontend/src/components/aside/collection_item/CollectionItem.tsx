@@ -1,4 +1,4 @@
-import { Typography, theme } from "antd";
+import { Typography } from "antd";
 import { setPage } from "../../../redux/reducers/aside";
 import { useAppSelector, useAppDispatch } from "../../../redux/store";
 import { CollectionType } from "../../../types/types";
