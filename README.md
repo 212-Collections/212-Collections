@@ -1,4 +1,12 @@
+
 # 212-Collections
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/212-Collections/Branding/main/thumbnail/thumbnail_dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/212-Collections/Branding/main/thumbnail/thumbnail_light.png">
+  <img align="right" height="300px" alt="thumbnail" src="https://raw.githubusercontent.com/212-Collections/Branding/main/thumbnail/thumbnail_light.png">
+</picture>
+
 
 A simple, intuitive software that allows you to create customized collections for storing and organizing your personal data in a user-friendly interface with your own online database.
 
