@@ -3,17 +3,7 @@
   width: var(--width);
   min-width: var(--width);
   height: calc(100vh - 69px - 1px - 12px);
-  overflow-y: auto;
+  overflow-y: auto !important;
   overflow-x: hidden;
   padding-bottom: calc(2*51px);
-
-  // li:last-child {
-  //   padding: 8px;
-
-  //   button {
-  //     padding: 16px 24px;
-  //     text-align: left;
-  //     height: 100%;
-  //   }
-  // }
 }
