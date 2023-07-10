@@ -12,6 +12,10 @@ function api(fastify, opts, next) {
         "uploads",
         "item_icon" + path.extname(data.filename)
       );
+      const uploadDir = path.dirname(uploadPath);
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir);
+      }
       const stream = fs.createWriteStream(uploadPath);
       await new Promise((resolve, reject) => {
         data.file
@@ -39,6 +43,10 @@ function api(fastify, opts, next) {
         "uploads",
         "item_image" + path.extname(data.filename)
       );
+      const uploadDir = path.dirname(uploadPath);
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir);
+      }
       const stream = fs.createWriteStream(uploadPath);
       await new Promise((resolve, reject) => {
         data.file

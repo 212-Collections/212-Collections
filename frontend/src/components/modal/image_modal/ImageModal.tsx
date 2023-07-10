@@ -369,7 +369,7 @@ export default function ImageModal({
       <Form
         form={form}
         layout="vertical"
-        name={"image_modal" + name}
+        name={"image_modal_" + name}
         onFinish={submitForm}
       >
         {/* {imageModal.options.map((option: any, index: number) => (
