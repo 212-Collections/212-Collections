@@ -149,7 +149,7 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
         onCancel={cancel}
         footer={modalFooter}
       >
-        <Form
+        {itemModal.open && <Form
           form={form}
           layout="vertical"
           name={"item_modal"}
@@ -207,7 +207,7 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
               <Input maxLength={32} allowClear />
             </Form.Item>
             <Form.Item name="version" label="Version">
-              <Input maxLength={10} />
+              <Input maxLength={16} />
             </Form.Item>
           </div>
 
@@ -283,12 +283,12 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
               <DatePicker style={{ width: "100%" }} />
             </Form.Item>
           </div>
-        </Form>
+        </Form>}
+        <ImageModal
+          name="item"
+          setImage={{ avatar: setAvatarData, image: setImageData }}
+        />
       </Modal>
-      <ImageModal
-        name="item"
-        setImage={{ ...{ avatar: setAvatarData, image: setImageData } }}
-      />
     </>
   );
 }

@@ -73,19 +73,6 @@ function api(fastify, opts, next) {
     }
   });
 
-  fastify.get("/cryptokey", async (request, reply) => {
-    console.log("> Get cryptokey");
-    try {
-      const origin = request.headers;
-      const ipadresse = request.ip;
-
-      reply.status(200).send({ data: ipadresse });
-    } catch (error) {
-      console.log(error);
-      reply.status(500).send(error);
-    }
-  });
-
   next();
 }
 
