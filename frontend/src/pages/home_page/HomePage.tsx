@@ -18,6 +18,7 @@ import { logout, saveSettings, setPage } from "../../redux/reducers/aside";
 
 export default function HomePage() {
   const [collections, setCollections] = useState([]);
+  const [size, setSize] = useState(0);
   const dispatch = useAppDispatch();
   const [form] = Form.useForm();
   const settings = useAppSelector((state) => state.aside.settings);
@@ -32,6 +33,14 @@ export default function HomePage() {
       .then((res) => res.json())
       .then((obj) => setCollections(obj));
   }, []);
+
+  useEffect(() => {
+    fetch("http://localhost:49449/data/size")
+      .then((res) => res.json())
+      .then((obj: { size: number }) => {
+        setSize(obj.size);
+      });
+  }, [username]);
 
   useEffect(() => {
     form.setFieldsValue(settings);
@@ -231,7 +240,10 @@ export default function HomePage() {
   return (
     <>
       <header id="header" style={{ backgroundColor: colorBgContainer }}>
-        <Typography.Title level={3}>Home</Typography.Title>
+        <div style={{ alignItems: "baseline" }}>
+          <Typography.Title level={3}>Home</Typography.Title>
+          <Typography.Text>{(size + 1).toFixed(1)} MB / 512 MB</Typography.Text>
+        </div>
         <div>
           <Typography.Text>Connected as {username}</Typography.Text>
           <Button

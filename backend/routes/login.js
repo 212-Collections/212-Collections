@@ -3,6 +3,8 @@ const jwt = require("jsonwebtoken");
 
 const secret_key = "idk-how-to-hide-it-😭";
 
+const Collection = require("../models/collection");
+
 function api(fastify, opts, next) {
   fastify.post("/login", async (request, reply) => {
     console.log("> Login");
@@ -73,6 +75,20 @@ function api(fastify, opts, next) {
     }
   });
 
+  fastify.get("/data/size", async (request, reply) => {
+    console.log("> Get info");
+    try {
+      const db = mongoose.connection.db;
+      if (db) {
+        const stats = await db.stats();
+        const size = stats.dataSize / (1024 * 1000);
+        reply.status(200).send({size});
+      }
+    } catch (error) {
+      console.log(error);
+      reply.status(500).send(error);
+    }
+  });
   next();
 }
 
