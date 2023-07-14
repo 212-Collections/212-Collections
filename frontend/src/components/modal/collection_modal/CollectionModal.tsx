@@ -3,16 +3,16 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import {
   setCollectionModal,
-  setImageModal,
+  setImageModalCollection,
 } from "../../../redux/reducers/modal";
 import { deleteCollection, saveCollection } from "../../../redux/reducers/list";
 import Avatar from "../../media/avatar/Avatar";
 import { AvatarType } from "../../../types/types";
 import { useEffect, useState } from "react";
-import ImageModal from "../image_modal/ImageModal";
 import collection, {
   updateCollection,
 } from "../../../redux/reducers/collection";
+import ImageModal from "../image_modal/ImageModal";
 
 export default function CollectionModal() {
   const [form] = Form.useForm();
@@ -22,6 +22,7 @@ export default function CollectionModal() {
     (state) => state.modal.collectionModal
   );
   const collections = useAppSelector((state) => state.list.collections);
+  const imageModalCollection = useAppSelector((state) => state.modal.imageModalCollection);
 
   const [avatarData, setAvatarData] = useState<AvatarType>({
     border: "rounded",
@@ -113,63 +114,67 @@ export default function CollectionModal() {
         </Button>,
       ]}
     >
-      {collectionModal.open && (
-        <Form
-          form={form}
-          layout="vertical"
-          name={"collection_modal"}
-          onFinish={submit}
-        >
-          <div id="title">
-            {avatarData.data === null || avatarData.data === "" ? (
-              <Button
-                onClick={() =>
-                  dispatch(
-                    setImageModal({
-                      open: true,
-                      type: "avatar",
-                      name: "collection",
-                      options: ["base64", "url", "emoji", "color"],
-                    })
-                  )
-                }
-                style={{ width: "69px", height: "69px" }}
-              >
-                Icon
-              </Button>
-            ) : (
-              <div
-                style={{ cursor: "pointer" }}
-                onClick={() =>
-                  dispatch(
-                    setImageModal({
-                      open: true,
-                      type: "avatar",
-                      options: ["base64", "url", "emoji", "color"],
-                      imageInit: avatarData,
-                    })
-                  )
-                }
-              >
-                <Avatar size={64} image={avatarData} />
-              </div>
-            )}
-            <Form.Item
-              name="name"
-              label="Name"
-              rules={[
-                {
-                  required: true,
-                  message: "Name is required",
-                },
-              ]}
+      <Form
+        form={form}
+        layout="vertical"
+        name={"collection_modal"}
+        onFinish={submit}
+      >
+        <div id="title">
+          {avatarData.data === null || avatarData.data === "" ? (
+            <Button
+              onClick={() =>
+                dispatch(
+                  setImageModalCollection({
+                    open: true,
+                    type: "avatar",
+                    name: "collection",
+                    options: ["base64", "url", "emoji", "color"],
+                  })
+                )
+              }
+              style={{ width: "69px", height: "69px" }}
             >
-              <Input maxLength={32} allowClear />
-            </Form.Item>
-          </div>
-        </Form>
-      )}
-      <ImageModal name="collection" setImage={{ avatar: setAvatarData }} />
+              Icon
+            </Button>
+          ) : (
+            <div
+              style={{ cursor: "pointer" }}
+              onClick={() =>
+                dispatch(
+                  setImageModalCollection({
+                    open: true,
+                    type: "avatar",
+                    options: ["base64", "url", "emoji", "color"],
+                    imageInit: avatarData,
+                  })
+                )
+              }
+            >
+              <Avatar size={64} image={avatarData} />
+            </div>
+          )}
+          <Form.Item
+            name="name"
+            label="Name"
+            rules={[
+              {
+                required: true,
+                message: "Name is required",
+              },
+            ]}
+          >
+            <Input maxLength={32} allowClear />
+          </Form.Item>
+        </div>
+      </Form>
+
+      <ImageModal
+        name="collection"
+        setImage={{ avatar: setAvatarData }}
+        setImageModal={setImageModalCollection}
+        imageModal={imageModalCollection}
+      />
     </Modal>
   );
 }

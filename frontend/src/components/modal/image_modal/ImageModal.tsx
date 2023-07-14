@@ -1,29 +1,29 @@
 import {
+  Button,
+  ColorPicker,
+  Divider,
+  Form,
   Input,
   Modal,
-  Form,
-  Button,
-  Space,
-  Select,
   Segmented,
-  Divider,
-  ColorPicker,
+  Select,
+  Space,
 } from "antd";
+import { AvatarType, ImageType, UploadType } from "../../../types/types";
+import { useEffect, useState } from "react";
 import {
   CloudDownloadOutlined,
   LoadingOutlined,
   PictureOutlined,
   SmileOutlined,
 } from "@ant-design/icons";
-import { useEffect, useState } from "react";
-import twemoji from "twemoji";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
-import { setImageModal } from "../../../redux/reducers/modal";
-import Avatar from "../../media/avatar/Avatar";
-import UploadButton from "../components/upload_button/UploadButton";
+import { ImageModalType } from "../../../redux/reducers/modal";
 import EmojiSelector from "../components/emoji_selector/EmojiSelector";
+import UploadButton from "../components/upload_button/UploadButton";
+import twemoji from "twemoji";
+import Avatar from "../../media/avatar/Avatar";
 import Image from "../../media/image/Image";
-import { AvatarType, ImageType, UploadType } from "../../../types/types";
 
 const initImageData: ImageType | AvatarType = {
   border: "rounded",
@@ -49,22 +49,29 @@ const initModalData: ModalDataType = {
 };
 
 export default function ImageModal({
+  setImageModal,
+  imageModal,
   setImage,
   name,
 }: {
+  setImageModal: any;
+  imageModal: ImageModalType;
   setImage: any;
   name: string;
 }) {
+  console.log("image modal render");
+
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
-  const [pickerVisible, setPickerVisible] = useState(false);
-  const currentTheme = useAppSelector((state) => state.aside.theme);
 
-  const imageModal = useAppSelector((state) => state.modal.imageModal);
+  const [modalData, setModalData] = useState<ModalDataType>(initModalData);
   const [imageData, setImageData] = useState<ImageType | AvatarType>(
     initImageData as ImageType | AvatarType
   );
-  const [modalData, setModalData] = useState<ModalDataType>(initModalData);
+
+  const [pickerVisible, setPickerVisible] = useState(false);
+
+  const imageModalItem = useAppSelector((state) => state.modal.imageModalItem);
 
   useEffect(() => {
     if (imageModal.open) {
@@ -80,9 +87,6 @@ export default function ImageModal({
     updateImageData();
   }, [modalData]);
 
-  if (!imageModal.open && imageModal.name !== name) return <></>;
-
-  // OK
   function updateModalData() {
     const init = imageModal.imageInit as ImageType | AvatarType | null;
     if (init?.type) {
@@ -103,7 +107,6 @@ export default function ImageModal({
     }
   }
 
-  // OK
   function updateImageData() {
     setImageData((currentImageData: any) => {
       const type = modalData.type;
@@ -123,7 +126,61 @@ export default function ImageModal({
     });
   }
 
-  // OK
+  function selectEmoji(selectedEmoji: any) {
+    const emoji = selectedEmoji.native;
+    const svg = twemoji.parse(emoji, {
+      folder: "svg",
+      ext: ".svg",
+    });
+    const svgURL = svg.match(/src="([^"]+)"/)[1];
+    setModalData((prevModalData) => ({
+      ...prevModalData,
+      emoji: svgURL,
+    }));
+    setPickerVisible(false);
+  }
+
+  function setType(value: UploadType) {
+    setModalData((prevData) => {
+      return {
+        ...prevData,
+        type: value,
+      };
+    });
+  }
+
+  function submitForm() {
+    const { type } = imageModal;
+    setImage[type](imageData);
+    dispatch(setImageModal({ open: false, imageInit: undefined }));
+    resetForm();
+  }
+
+  function cancelModal() {
+    dispatch(setImageModal({ open: false }));
+    resetForm();
+  }
+
+  function resetForm() {
+    form.resetFields();
+    setPickerVisible(false);
+    setImageData(initImageData as ImageType | AvatarType);
+    setModalData({
+      url: "",
+      base64: "",
+      emoji: "",
+      color: "",
+      type: "base64",
+    });
+  }
+
+  const modalTitle = (
+    <>
+      <PictureOutlined style={{ margin: "0 8px 0 4px" }} />
+      Edit {imageModal.type}
+    </>
+  );
+
   const segmentedOption = imageModal.options.map((item) => {
     switch (item) {
       case "base64":
@@ -177,65 +234,6 @@ export default function ImageModal({
         };
     }
   });
-
-  // OK
-  function cancelModal() {
-    dispatch(setImageModal({ open: false }));
-    resetForm();
-  }
-
-  // OK
-  function submitForm() {
-    const { type } = imageModal;
-    setImage[type](imageData);
-    dispatch(setImageModal({ open: false, imageInit: undefined }));
-    resetForm();
-  }
-
-  // OK
-  function selectEmoji(selectedEmoji: any) {
-    const emoji = selectedEmoji.native;
-    const svg = twemoji.parse(emoji, {
-      folder: "svg",
-      ext: ".svg",
-    });
-    const svgURL = svg.match(/src="([^"]+)"/)[1];
-    setModalData((prevModalData) => ({
-      ...prevModalData,
-      emoji: svgURL,
-    }));
-    setPickerVisible(false);
-  }
-  // OK
-  function resetForm() {
-    form.resetFields();
-    setPickerVisible(false);
-    setImageData(initImageData as ImageType | AvatarType);
-    setModalData({
-      url: "",
-      base64: "",
-      emoji: "",
-      color: "",
-      type: "base64",
-    });
-  }
-
-  // OK
-  function setType(value: UploadType) {
-    setModalData((prevData) => {
-      return {
-        ...prevData,
-        type: value,
-      };
-    });
-  }
-
-  const modalTitle = (
-    <>
-      <PictureOutlined style={{ margin: "0 8px 0 4px" }} />
-      Edit {imageModal.type}
-    </>
-  );
 
   const modalFooter = [
     <Button key="reset" danger onClick={resetForm}>
@@ -359,273 +357,208 @@ export default function ImageModal({
       onCancel={cancelModal}
       footer={modalFooter}
     >
-      <Segmented
-        onChange={(value) => setType(value as UploadType)}
-        options={segmentedOption}
-        value={imageData.type || "base64"}
-        style={{ marginBottom: "16px" }}
-      />
+      {imageModal.open ? (
+        <>
+          <Segmented
+            onChange={(value) => setType(value as UploadType)}
+            options={segmentedOption}
+            value={imageData.type || "base64"}
+            style={{ marginBottom: "16px" }}
+          />
+          <Form
+            form={form}
+            layout="vertical"
+            name={"image_modal_" + name}
+            onFinish={submitForm}
+          >
+            {imageModal.options.map((option: any, index: number) => {
+              if (option === "base64" && imageData.type === "base64") {
+                return (
+                  <Form.Item
+                    key={index}
+                    style={{ marginBottom: "0" }}
+                    name="image"
+                  >
+                    <UploadButton
+                      setImageBase32={(value) =>
+                        setModalData((data) => ({ ...data, base64: value }))
+                      }
+                      uploadType="icon"
+                      crop={
+                        imageModal.type === "avatar"
+                          ? {
+                              showReset: true,
+                              rotationSlider: true,
+                              fillColor: "transparent",
+                              maxZoom: 20,
+                            }
+                          : null
+                      }
+                    />
+                  </Form.Item>
+                );
+              }
 
-      <Form
-        form={form}
-        layout="vertical"
-        name={"image_modal_" + name}
-        onFinish={submitForm}
-      >
-        {/* {imageModal.options.map((option: any, index: number) => (
-          <div key={index}>
-            {option === "base64" && imageData.type === "base64" ? (
-              <Form.Item
-                key={index}
-                style={{ marginBottom: "0" }}
-                name="image"
-              >
-                <UploadButton
-                  setImageBase32={(value) =>
-                    setModalData((data) => ({ ...data, base64: value }))
-                  }
-                  uploadType="icon"
-                  crop={
-                    imageModal.type === "avatar"
-                      ? {
-                          showReset: true,
-                          rotationSlider: true,
-                          fillColor: "transparent",
-                        }
-                      : null
-                  }
-                />
-              </Form.Item>
-            ) : null}
-            {option === "url" && imageData.type === "url" ? (
-              <Form.Item
-                key={index}
-                style={{ marginBottom: "0", width: "100%" }}
-                name="link"
-              >
-                <Input
-                  placeholder="URL"
-                  allowClear
-                  value={modalData.url} // probleme
-                  onChange={(e) =>
-                    setModalData((data) => ({
-                      ...data,
-                      url: e.target.value.trim(),
-                    }))
-                  }
-                />
-              </Form.Item>
-            ) : null}
-            {option === "emoji" && imageData.type === "emoji" ? (
-              <Form.Item
-                key={index}
-                style={{ marginBottom: "0", width: "100%" }}
-              >
-                <EmojiSelector
-                  selectEmoji={selectEmoji}
-                  setVisible={setPickerVisible}
-                  visible={pickerVisible}
-                />
-              </Form.Item>
-            ) : null}
-            {option === "color" && imageData.type === "color" ? (
-              <Form.Item
-                key={index}
-                style={{ marginBottom: "0", width: "100%" }}
-                name="color"
-              >
-                <ColorPicker
-                  onChange={(value) =>
-                    setModalData((data) => ({
-                      ...data,
-                      color: value.toHexString(),
-                    }))
-                  }
-                />
-              </Form.Item>
-            ) : null}
-          </div>
-        ))} */}
-        {imageModal.options.map((option: any, index: number) => {
-          if (option === "base64" && imageData.type === "base64") {
-            return (
-              <Form.Item key={index} style={{ marginBottom: "0" }} name="image">
-                <UploadButton
-                  setImageBase32={(value) =>
-                    setModalData((data) => ({ ...data, base64: value }))
-                  }
-                  uploadType="icon"
-                  crop={
-                    imageModal.type === "avatar"
-                      ? {
-                          showReset: true,
-                          rotationSlider: true,
-                          fillColor: "transparent",
-                          maxZoom: 20,
-                        }
-                      : null
-                  }
-                />
-              </Form.Item>
-            );
-          }
+              if (option === "url" && imageData.type === "url") {
+                return (
+                  <Form.Item
+                    style={{ marginBottom: "0", width: "100%" }}
+                    name="link"
+                    key={index}
+                  >
+                    <Input
+                      placeholder="URL"
+                      allowClear
+                      value={modalData.url}
+                      onChange={(e) =>
+                        setModalData((data) => ({
+                          ...data,
+                          url: e.target.value.trim(),
+                        }))
+                      }
+                    />
+                  </Form.Item>
+                );
+              }
 
-          if (option === "url" && imageData.type === "url") {
-            return (
-              <Form.Item
-                style={{ marginBottom: "0", width: "100%" }}
-                name="link"
-                key={index}
-              >
-                <Input
-                  placeholder="URL"
-                  allowClear
-                  value={modalData.url}
-                  onChange={(e) =>
-                    setModalData((data) => ({
-                      ...data,
-                      url: e.target.value.trim(),
-                    }))
-                  }
-                />
-              </Form.Item>
-            );
-          }
+              if (option === "emoji" && imageData.type === "emoji") {
+                return (
+                  <Form.Item
+                    key={index}
+                    style={{ marginBottom: "0", width: "100%" }}
+                  >
+                    <EmojiSelector
+                      selectEmoji={selectEmoji}
+                      setVisible={setPickerVisible}
+                      visible={pickerVisible}
+                    />
+                  </Form.Item>
+                );
+              }
 
-          if (option === "emoji" && imageData.type === "emoji") {
-            return (
-              <Form.Item
-                key={index}
-                style={{ marginBottom: "0", width: "100%" }}
-              >
-                <EmojiSelector
-                  selectEmoji={selectEmoji}
-                  setVisible={setPickerVisible}
-                  visible={pickerVisible}
-                />
-              </Form.Item>
-            );
-          }
+              if (option === "color" && imageData.type === "color") {
+                return (
+                  <Form.Item
+                    key={index}
+                    style={{ marginBottom: "0", width: "100%" }}
+                    name="color"
+                  >
+                    <ColorPicker
+                      format="hex"
+                      placement="bottom"
+                      value={modalData.color}
+                      defaultValue={modalData.color || "#1668DC"}
+                      onChange={(value) =>
+                        setModalData((data) => ({
+                          ...data,
+                          color: value.toHexString(),
+                        }))
+                      }
+                    />
+                  </Form.Item>
+                );
+              }
 
-          if (option === "color" && imageData.type === "color") {
-            return (
-              <Form.Item
-                key={index}
-                style={{ marginBottom: "0", width: "100%" }}
-                name="color"
-              >
-                <ColorPicker
-                  format="hex"
-                  placement="bottom"
-                  value={modalData.color}
-                  defaultValue={modalData.color || "#1668DC"}
-                  onChange={(value) =>
-                    setModalData((data) => ({
-                      ...data,
-                      color: value.toHexString(),
-                    }))
-                  }
-                />
-              </Form.Item>
-            );
-          }
-
-          return null;
-        })}
-        <Divider />
-        <div
-          style={
-            imageModal.type === "avatar" ? { display: "flex", gap: "16px" } : {}
-          }
-        >
-          <div style={{ flex: 1 }}>
-            <Form.Item
-              name="render"
-              label="Render type"
-              tooltip="The type of render"
-              initialValue="smooth"
+              return null;
+            })}
+            <Divider />
+            <div
+              style={
+                imageModal.type === "avatar"
+                  ? { display: "flex", gap: "16px" }
+                  : {}
+              }
             >
-              <Select
-                disabled={
-                  imageData.type === "color" || imageData.type === "emoji"
-                    ? true
-                    : false
-                }
-                style={{ width: "100%" }}
-                value={imageData.render}
-                onChange={(value) =>
-                  setImageData((data: AvatarType | ImageType) => {
-                    return { ...data, render: value };
-                  })
-                }
-              >
-                <Select.Option value="pixelated" label="Pixelated">
-                  <Space>
-                    {pixelatedSVG}
-                    Pixelated
-                  </Space>
-                </Select.Option>
-                <Select.Option value="smooth" label="Smooth">
-                  <Space>
-                    {smoothSVG}
-                    Smooth
-                  </Space>
-                </Select.Option>
-              </Select>
-            </Form.Item>
-            {imageModal.type !== "image" ? (
-              <Form.Item
-                name="border"
-                label="Border type"
-                tooltip="The type of border"
-                initialValue="rounded"
-              >
-                <Select
-                  disabled={imageData.type === "emoji" ? true : false}
-                  style={{ width: "100%" }}
-                  value={
-                    imageData && "border" in imageData
-                      ? imageData.border
-                      : "rounded"
-                  }
-                  onChange={(value) =>
-                    setImageData((d: AvatarType | ImageType) => {
-                      return { ...d, border: value };
-                    })
-                  }
+              <div style={{ flex: 1 }}>
+                <Form.Item
+                  name="render"
+                  label="Render type"
+                  tooltip="The type of render"
+                  initialValue="smooth"
                 >
-                  <Select.Option value="round" label="Round">
-                    <Space>
-                      {roundSVG}
-                      Round
-                    </Space>
-                  </Select.Option>
-                  <Select.Option value="rounded" label="Rounded">
-                    <Space>
-                      {roundedSVG}
-                      Rounded
-                    </Space>
-                  </Select.Option>
-                  <Select.Option value="square" label="Square">
-                    <Space>
-                      {squareSVG}
-                      Square
-                    </Space>
-                  </Select.Option>
-                </Select>
-              </Form.Item>
-            ) : null}
-          </div>
-          <div style={{ flex: 1 }}>
-            {imageModal.type === "avatar" ? (
-              <Avatar image={imageData as AvatarType} />
-            ) : null}
-            {imageModal.type === "image" ? (
-              <Image image={imageData as ImageType} />
-            ) : null}
-          </div>
-        </div>
-      </Form>
+                  <Select
+                    disabled={
+                      imageData.type === "color" || imageData.type === "emoji"
+                        ? true
+                        : false
+                    }
+                    style={{ width: "100%" }}
+                    value={imageData.render}
+                    onChange={(value) =>
+                      setImageData((data: AvatarType | ImageType) => {
+                        return { ...data, render: value };
+                      })
+                    }
+                  >
+                    <Select.Option value="pixelated" label="Pixelated">
+                      <Space>
+                        {pixelatedSVG}
+                        Pixelated
+                      </Space>
+                    </Select.Option>
+                    <Select.Option value="smooth" label="Smooth">
+                      <Space>
+                        {smoothSVG}
+                        Smooth
+                      </Space>
+                    </Select.Option>
+                  </Select>
+                </Form.Item>
+                {imageModal.type !== "image" ? (
+                  <Form.Item
+                    name="border"
+                    label="Border type"
+                    tooltip="The type of border"
+                    initialValue="rounded"
+                  >
+                    <Select
+                      disabled={imageData.type === "emoji" ? true : false}
+                      style={{ width: "100%" }}
+                      value={
+                        imageData && "border" in imageData
+                          ? imageData.border
+                          : "rounded"
+                      }
+                      onChange={(value) =>
+                        setImageData((d: AvatarType | ImageType) => {
+                          return { ...d, border: value };
+                        })
+                      }
+                    >
+                      <Select.Option value="round" label="Round">
+                        <Space>
+                          {roundSVG}
+                          Round
+                        </Space>
+                      </Select.Option>
+                      <Select.Option value="rounded" label="Rounded">
+                        <Space>
+                          {roundedSVG}
+                          Rounded
+                        </Space>
+                      </Select.Option>
+                      <Select.Option value="square" label="Square">
+                        <Space>
+                          {squareSVG}
+                          Square
+                        </Space>
+                      </Select.Option>
+                    </Select>
+                  </Form.Item>
+                ) : null}
+              </div>
+              <div style={{ flex: 1 }}>
+                {imageModal.type === "avatar" ? (
+                  <Avatar image={imageData as AvatarType} />
+                ) : null}
+                {imageModal.type === "image" ? (
+                  <Image image={imageData as ImageType} />
+                ) : null}
+              </div>
+            </div>
+          </Form>
+        </>
+      ) : null}
     </Modal>
   );
 }

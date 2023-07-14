@@ -14,21 +14,22 @@ import {
   updateItem,
   deleteItem,
 } from "../../../redux/reducers/collection";
-import ImageModal from "../image_modal/ImageModal";
+import ImageModalItem from "../image_modal/ImageModal";
 import { useEffect, useState } from "react";
 import Avatar from "../../media/avatar/Avatar";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
-import { setImageModal, setItemModal } from "../../../redux/reducers/modal";
+import { setImageModalItem, setItemModal } from "../../../redux/reducers/modal";
 import Image from "../../media/image/Image";
 import dayjs from "dayjs";
 import { AvatarType, ImageType } from "../../../types/types";
+import ImageModal from "../image_modal/ImageModal";
 
 export default function ItemModal({ collectionId }: { collectionId: string }) {
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
 
   const itemModal = useAppSelector((state) => state.modal.itemModal);
-  const imageModal = useAppSelector((state) => state.modal.imageModal);
+  const imageModalItem = useAppSelector((state) => state.modal.imageModalItem);
 
   const [avatarData, setAvatarData] = useState<AvatarType>(
     itemModal.data
@@ -149,7 +150,7 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
         onCancel={cancel}
         footer={modalFooter}
       >
-        {itemModal.open && <Form
+        <Form
           form={form}
           layout="vertical"
           name={"item_modal"}
@@ -161,7 +162,7 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
                 onClick={() =>
                   dispatch(
                     dispatch(
-                      setImageModal({
+                      setImageModalItem({
                         name: "item",
                         open: true,
                         type: "avatar",
@@ -180,7 +181,7 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
                 onClick={() =>
                   dispatch(
                     dispatch(
-                      setImageModal({
+                      setImageModalItem({
                         name: "item",
                         open: true,
                         type: "avatar",
@@ -239,7 +240,7 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
               <Button
                 onClick={() =>
                   dispatch(
-                    setImageModal({
+                    setImageModalItem({
                       name: "item",
                       open: true,
                       type: "image",
@@ -256,7 +257,7 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
                 style={{ cursor: "pointer" }}
                 onClick={() =>
                   dispatch(
-                    setImageModal({
+                    setImageModalItem({
                       name: "item",
                       open: true,
                       type: "image",
@@ -283,8 +284,15 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
               <DatePicker style={{ width: "100%" }} />
             </Form.Item>
           </div>
-        </Form>}
+        </Form>
+
+        {/* <ImageModalItem
+          name="item"
+          setImage={{ avatar: setAvatarData, image: setImageData }}
+        /> */}
         <ImageModal
+          setImageModal={setImageModalItem}
+          imageModal={imageModalItem}
           name="item"
           setImage={{ avatar: setAvatarData, image: setImageData }}
         />

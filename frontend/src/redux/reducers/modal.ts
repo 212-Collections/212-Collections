@@ -11,7 +11,7 @@ export interface RootModal {
   type: "new" | "update";
   data?: any;
 }
-export interface ImageModal {
+export interface ImageModalType {
   open: boolean;
   loading: boolean;
   type: "avatar" | "image";
@@ -23,7 +23,8 @@ export interface ImageModal {
 interface ModalState {
   collectionModal: RootModal;
   itemModal: RootModal;
-  imageModal: ImageModal;
+  imageModalItem: ImageModalType;
+  imageModalCollection: ImageModalType;
 }
 
 const initialState: ModalState = {
@@ -37,7 +38,14 @@ const initialState: ModalState = {
     loading: false,
     type: "new",
   },
-  imageModal: {
+  imageModalCollection: {
+    open: false,
+    loading: false,
+    type: "image",
+    options: [],
+    name: "",
+  },
+  imageModalItem: {
     open: false,
     loading: false,
     type: "image",
@@ -64,9 +72,19 @@ export const ModalSlice = createSlice({
         data: action.payload.data || null,
       };
     },
-    setImageModal: (state, action: PayloadAction<Partial<ImageModal>>) => {
-      state.imageModal = {
-        ...state.imageModal,
+    setImageModalItem: (state, action: PayloadAction<Partial<ImageModalType>>) => {
+      state.imageModalItem = {
+        ...state.imageModalItem,
+        ...action.payload,
+        imageInit: action.payload.imageInit || null,
+      };
+    },
+    setImageModalCollection: (
+      state,
+      action: PayloadAction<Partial<ImageModalType>>
+    ) => {
+      state.imageModalCollection = {
+        ...state.imageModalCollection,
         ...action.payload,
         imageInit: action.payload.imageInit || null,
       };
@@ -81,6 +99,7 @@ export default ModalSlice.reducer;
 export const {
   setCollectionModal,
   setItemModal,
-  setImageModal,
+  setImageModalItem,
+  setImageModalCollection,
   resetModalReducer,
 } = ModalSlice.actions;
