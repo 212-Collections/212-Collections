@@ -29,11 +29,11 @@ export default function Title({
       <Typography.Text type="secondary" style={{ flexGrow: 1 }}>
         {version}
       </Typography.Text>
-      <Options
+      {editFunction && deleteFunction ? <Options
         editFunction={editFunction}
         deleteFunction={deleteFunction}
         type="item"
-      />
+      /> : null}
     </div>
   );
 }

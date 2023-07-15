@@ -82,7 +82,9 @@ function api(fastify, opts, next) {
       if (db) {
         const stats = await db.stats();
         const size = stats.dataSize / (1024 * 1000);
-        reply.status(200).send({size});
+        reply.status(200).send({ size });
+      } else {
+        reply.status(500).send({ size: -1 });
       }
     } catch (error) {
       console.log(error);

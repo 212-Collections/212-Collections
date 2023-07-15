@@ -16,6 +16,7 @@ interface AsideType {
     theme: ThemeState;
     view: string;
   };
+  selectedText?: string
 }
 
 const initialState: AsideType = {
@@ -199,6 +200,9 @@ export const AsideSlice = createSlice({
     resetAsideReducer: (state) => {
       state = initialState;
     },
+    setSelectedText: (state, action) => {
+      state.selectedText = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (state, action: PayloadAction<any>) => {
@@ -249,5 +253,5 @@ export const AsideSlice = createSlice({
 });
 
 export default AsideSlice.reducer;
-export const { setTheme, setPage, resetAsideReducer, setDefaultItemView } =
+export const { setTheme, setPage, resetAsideReducer, setDefaultItemView, setSelectedText } =
   AsideSlice.actions;

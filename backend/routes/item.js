@@ -116,6 +116,47 @@ function api(fastify, opts, next) {
     }
   });
 
+  fastify.post("/search", async (request, reply) => {
+    console.log("> Search");
+    try {
+      console.log(request.body);
+      const searchTerm = request.body.term;
+      const searchFields = request.body.fields;
+      const collections = await mongoose.connection.db.collections();
+      const searchResults = [];
+      for (const collection of collections) {
+        const modelName = collection.collectionName;
+        const Model = mongoose.connection.model(
+          modelName,
+          new mongoose.Schema({}),
+          modelName
+        );
+        let conditions = {};
+        if (searchFields) {
+          const fieldsArray = searchFields.split(",");
+          const fieldConditions = fieldsArray.map((field) => ({
+            [field]: { $regex: searchTerm, $options: "i" },
+          }));
+          conditions = { $or: fieldConditions };
+        } else {
+          conditions = { $text: { $search: searchTerm } };
+        }
+        const results = await Model.find(conditions);
+        if (results.length > 0) {
+          const updatedResults = results.map((result) => ({
+            ...result.toObject(),
+            collectionId: modelName.split("-")[1],
+          }));
+          searchResults.push(...updatedResults);
+        }
+      }
+      return { results: searchResults };
+    } catch (error) {
+      console.log(error);
+      reply.status(500).send(error);
+    }
+  });
+
   next();
 }
 

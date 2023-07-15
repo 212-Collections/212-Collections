@@ -11,7 +11,12 @@ import CollectionPage from "./pages/collection_page/CollectionPage";
 import LoginPage from "./pages/login_page/LoginPage";
 import HomePage from "./pages/home_page/HomePage";
 import { useEffect } from "react";
-import { fetchSettings } from "./redux/reducers/aside";
+import {
+  fetchSettings,
+  setPage,
+  setSelectedText,
+} from "./redux/reducers/aside";
+import SearchPage from "./pages/search_page/SearchPage";
 
 export default function App() {
   const page = useAppSelector((state) => state.aside.page);
@@ -33,6 +38,16 @@ export default function App() {
     dispatch(fetchSettings());
   }, []);
 
+  document.addEventListener("keydown", (event) => {
+    if (event.ctrlKey && event.key === "f") {
+      event.preventDefault();
+      const selection = window.getSelection();
+      const selectedText = selection ? selection.toString() : "";
+      dispatch(setSelectedText(selectedText));
+      dispatch(setPage("search"));
+    }
+  });
+
   return (
     <ConfigProvider
       theme={{
@@ -49,6 +64,7 @@ export default function App() {
             <Aside />
             <Layout>
               {page === "home" ? <HomePage /> : null}
+              {page === "search" ? <SearchPage /> : null}
               {page.split("-")[0] === "collection" ? (
                 <CollectionPage collectionId={page.split("-")[1]} />
               ) : null}

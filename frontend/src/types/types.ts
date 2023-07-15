@@ -33,4 +33,5 @@ export interface ItemType {
   version?: string;
   link?: string;
   tags?: string[];
+  collectionId?: string;
 }
