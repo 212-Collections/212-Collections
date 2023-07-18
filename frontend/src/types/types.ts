@@ -35,3 +35,10 @@ export interface ItemType {
   tags?: string[];
   collectionId?: string;
 }
+
+export interface accountType {
+  username: string
+  cluster: string
+  token: string
+  database: string
+}

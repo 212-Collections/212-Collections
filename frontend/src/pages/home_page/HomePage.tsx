@@ -242,7 +242,7 @@ export default function HomePage() {
       <header id="header" style={{ backgroundColor: colorBgContainer }}>
         <div style={{ alignItems: "baseline" }}>
           <Typography.Title level={3}>Home</Typography.Title>
-          <Typography.Text>{(size + 1).toFixed(1)} MB / 512 MB</Typography.Text>
+          <Typography.Text>{size.toFixed(1)} MB / 512 MB</Typography.Text>
         </div>
         <div>
           <Typography.Text>Connected as {username}</Typography.Text>

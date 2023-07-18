@@ -9,7 +9,7 @@ function api(fastify, opts, next) {
   fastify.post("/login", async (request, reply) => {
     console.log("> Login");
     try {
-      const { username, password, cluster } = request.body;
+      const { username, password, cluster, database } = request.body;
       const uri =
         "mongodb+srv://" +
         username +
@@ -17,7 +17,9 @@ function api(fastify, opts, next) {
         password +
         "@" +
         cluster +
-        "/collection_db?retryWrites=true&w=majority";
+        "/" +
+        database +
+        "?retryWrites=true&w=majority";
       await mongoose.connect(uri, { useNewUrlParser: true }).then(() => {
         console.log("connected");
       });
@@ -31,6 +33,7 @@ function api(fastify, opts, next) {
         message: "Logged in successfully",
         token: token,
         cluster: cluster,
+        database: database
       });
     } catch (error) {
       reply.status(500).send(error);

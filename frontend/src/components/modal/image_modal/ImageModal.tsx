@@ -59,8 +59,6 @@ export default function ImageModal({
   setImage: any;
   name: string;
 }) {
-  console.log("image modal render");
-
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
 

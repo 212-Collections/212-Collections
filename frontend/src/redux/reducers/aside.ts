@@ -3,6 +3,7 @@ import { resetMessageReducer, setMessage } from "./message";
 import { resetModalReducer } from "./modal";
 import { resetListReducer } from "./list";
 import { resetCollectionReducer } from "./collection";
+import { accountType } from "../../types/types";
 
 export type ThemeState = "light" | "dark";
 export type PageState = string;
@@ -16,7 +17,8 @@ interface AsideType {
     theme: ThemeState;
     view: string;
   };
-  selectedText?: string
+  selectedText?: string;
+  accounts: accountType[];
 }
 
 const initialState: AsideType = {
@@ -27,12 +29,18 @@ const initialState: AsideType = {
     theme: "dark",
     view: "card",
   },
+  accounts: [],
 };
 
 export const login = createAsyncThunk(
   "login/username",
   async (
-    user: { username: string; password: string; cluster: string },
+    user: {
+      username: string;
+      password: string;
+      cluster: string;
+      database: string;
+    },
     thunkAPI
   ) => {
     const response = await fetch("http://localhost:49449/login", {
@@ -44,9 +52,23 @@ export const login = createAsyncThunk(
     });
     const data = await response.json();
     if (data.username) {
-      localStorage.setItem("username", data.username);
-      localStorage.setItem("cluster", data.cluster);
-      localStorage.setItem("token", data.token);
+      const account = {
+        username: data.username,
+        cluster: data.cluster,
+        token: data.token,
+        database: data.database,
+      };
+      const localStorageName = "212-collections-accounts";
+      var accounts = JSON.parse(localStorage.getItem(localStorageName) || "[]");
+      var existingAccount = accounts.findIndex(
+        (acc: accountType) => acc.database === account.database
+      );
+      if (existingAccount !== -1) {
+        accounts[existingAccount] = account;
+      } else {
+        accounts.push(account);
+      }
+      localStorage.setItem(localStorageName, JSON.stringify(accounts));
       thunkAPI.dispatch(
         setMessage({
           title: "Successfully authenticated",
@@ -203,6 +225,22 @@ export const AsideSlice = createSlice({
     setSelectedText: (state, action) => {
       state.selectedText = action.payload;
     },
+    getSavedAccounts: (state) => {
+      const localStorageName = "212-collections-accounts";
+      var localStorageAccounts = JSON.parse(
+        localStorage.getItem(localStorageName) || "[]"
+      );
+      state.accounts = localStorageAccounts;
+    },
+    UnregisterAccount: (state, action) => {
+      const localStorageName = "212-collections-accounts";
+      var accounts = JSON.parse(localStorage.getItem(localStorageName) || "[]");
+      accounts = accounts.filter(
+        (acc: accountType) => acc.database !== action.payload
+      );
+      state.accounts = accounts;
+      localStorage.setItem(localStorageName, JSON.stringify(accounts));
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (state, action: PayloadAction<any>) => {
@@ -253,5 +291,12 @@ export const AsideSlice = createSlice({
 });
 
 export default AsideSlice.reducer;
-export const { setTheme, setPage, resetAsideReducer, setDefaultItemView, setSelectedText } =
-  AsideSlice.actions;
+export const {
+  setTheme,
+  setPage,
+  resetAsideReducer,
+  setDefaultItemView,
+  setSelectedText,
+  UnregisterAccount,
+  getSavedAccounts,
+} = AsideSlice.actions;
