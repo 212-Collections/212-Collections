@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
+const axios = require("axios");
 
 const secret_key = "idk-how-to-hide-it-😭";
 
@@ -33,7 +34,7 @@ function api(fastify, opts, next) {
         message: "Logged in successfully",
         token: token,
         cluster: cluster,
-        database: database
+        database: database,
       });
     } catch (error) {
       reply.status(500).send(error);
@@ -94,6 +95,67 @@ function api(fastify, opts, next) {
       reply.status(500).send(error);
     }
   });
+
+  fastify.post("/webdata", async (request, reply) => {
+    console.log("> Get web data");
+    try {
+      const { url } = request.body;
+      const response = await axios.get(url);
+      const html = response.data;
+      function extractMetaTag(metaName) {
+        const regex = new RegExp(
+          `<meta[^>]*property=["']${metaName}["'][^>]*content=["']([^"']+)["']`,
+          "i"
+        );
+        const match = html.match(regex);
+        return match ? match[1] : null;
+      }
+
+      let icons = [];
+      let regex;
+
+      regex =
+        /<link[^>]*rel=["']apple-touch-icon["'][^>]*(?:sizes=["'](\d+)x(?:\d+)["'][^>])*>/gm;
+      icons = [...html.matchAll(regex)].sort((m1, m2) => m2[1] - m1[1]);
+
+      if (icons.length <= 0) {
+        regex =
+          /<link[^>]*rel=["']icon["'][^>]*sizes=["'](\d+)x(\d+)["'][^>]*>/gm;
+        icons = [...html.matchAll(regex)].sort((m1, m2) => m2[1] - m1[1]);
+      }
+
+      if (icons.length <= 0) {
+        regex = /<link[^>]*rel=["']icon["'][^>]*>/gm;
+        icons = [...html.matchAll(regex)];
+      }
+
+      const target = 64;
+      let link;
+
+      if (icons[0]) {
+        let icon = icons[0];
+        link = [...icon[0].matchAll(/href=["']([\w.\/-]+)["']/gm)][0][1];
+        if (!link.startsWith("http")) {
+          link = url + "/" + link;
+          link = link.replace(/([^:])\/{2,}/g, '$1/');
+        }
+      } else {
+        link = null;
+      }
+
+      const ogData = {
+        title: extractMetaTag("og:title"),
+        description: extractMetaTag("og:description"),
+        image: extractMetaTag("og:image"),
+        icon: link,
+      };
+      reply.status(500).send(ogData);
+    } catch (error) {
+      console.log(error);
+      reply.status(500).send(error);
+    }
+  });
+
   next();
 }
 

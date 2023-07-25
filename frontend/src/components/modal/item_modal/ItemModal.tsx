@@ -8,7 +8,7 @@ import {
   ColorPicker,
   Space,
 } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
+import { DownloadOutlined, LoadingOutlined } from "@ant-design/icons";
 import {
   saveItem,
   updateItem,
@@ -121,6 +121,37 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
     });
   }
 
+  function getWebSiteData() {
+    const url = form.getFieldValue("link");
+    fetch("http://localhost:49449/webdata", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ url: url }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        form.setFieldsValue({
+          title: data.title,
+          description: data.description,
+        });
+        if (data.icon)
+          setAvatarData({
+            border: "rounded",
+            render: "smooth",
+            data: data.icon,
+            type: "url",
+          });
+        if (data.image)
+          setImageData({
+            render: "smooth",
+            data: data.image,
+            type: "url",
+          });
+      });
+  }
+
   // function deleteI() {
   //   dispatch(deleteItem({ ...itemModal.data, collection_id: collectionId }));
   // }
@@ -218,7 +249,10 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
               label="Link"
               tooltip="The link of the new item"
             >
-              <Input allowClear />
+              <Space.Compact style={{ width: "100%" }}>
+                <Input allowClear />
+                <Button icon={<DownloadOutlined />} onClick={getWebSiteData} />
+              </Space.Compact>
             </Form.Item>
             <Form.Item name="color1" label=" " tooltip="Color 1">
               <ColorPicker />
