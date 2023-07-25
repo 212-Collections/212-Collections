@@ -100,8 +100,8 @@ export default function ImageModal({
         form.setFieldValue("border", init.border);
       }
       form.setFieldValue("render", init.render);
-      if (modalData.url) form.setFieldValue("link", modalData.url);
-      if (modalData.color) form.setFieldValue("color", modalData.color);
+      form.setFieldValue("link", type === "url" ? data : "");
+      form.setFieldValue("color", type === "color" ? data : "");
     }
   }
 
