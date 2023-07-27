@@ -6,7 +6,8 @@ import { useAppDispatch } from "../../../redux/store";
 import { setItemModal } from "../../../redux/reducers/modal";
 import { ItemType } from "../../../types/types";
 import Title from "../components/Title";
-import { setPage } from "../../../redux/reducers/aside";
+import { setPage } from "../../../redux/reducers/settings";
+import { useTranslation } from "react-i18next";
 
 export default function ItemCardSearch({
   item,
@@ -17,6 +18,7 @@ export default function ItemCardSearch({
 }) {
   const { icon, title, description, date, image, version, link, tags, _id } =
     item;
+    const { t } = useTranslation();
 
   const dispatch = useAppDispatch();
 
@@ -71,7 +73,7 @@ export default function ItemCardSearch({
         style={{ marginTop: "16px" }}
         onClick={() => setCollectionPage(item.collectionId as string)}
       >
-        Collection page
+        {t("page.search.open")}
       </Button>
     </Card>
   );

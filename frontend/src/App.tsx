@@ -12,16 +12,19 @@ import LoginPage from "./pages/login_page/LoginPage";
 import HomePage from "./pages/home_page/HomePage";
 import { useEffect } from "react";
 import {
+  ThemeState,
   fetchSettings,
+  setLang,
   setPage,
   setSelectedText,
-} from "./redux/reducers/aside";
+  setCurrentTheme,
+} from "./redux/reducers/settings";
 import SearchPage from "./pages/search_page/SearchPage";
 
 export default function App() {
-  const page = useAppSelector((state) => state.aside.page);
-  const theme = useAppSelector((state) => state.aside.theme);
-  const username = useAppSelector((state) => state.aside.username);
+  const page = useAppSelector((state) => state.settings.page);
+  const currentTheme = useAppSelector((state) => state.settings.currentTheme);
+  const username = useAppSelector((state) => state.settings.username);
   const dispatch = useAppDispatch();
 
   const combineDarkTheme = {
@@ -35,8 +38,21 @@ export default function App() {
   };
 
   useEffect(() => {
-    dispatch(fetchSettings());
-  }, []);
+    if (username) {
+      dispatch(fetchSettings());
+    } else {
+      const lang = localStorage.getItem("212-collections-lang");
+      if (lang) {
+        dispatch(setLang(lang));
+      }
+      const localTheme = localStorage.getItem(
+        "212-collections-theme"
+      ) as ThemeState;
+      if (localTheme) {
+        dispatch(setCurrentTheme(localTheme));
+      }
+    }
+  }, [username]);
 
   document.addEventListener("keydown", (event) => {
     if (event.ctrlKey && event.key === "f") {
@@ -51,14 +67,14 @@ export default function App() {
   return (
     <ConfigProvider
       theme={{
-        token: theme === "dark" ? combineDarkTheme : combineLightTheme,
+        token: currentTheme === "dark" ? combineDarkTheme : combineLightTheme,
       }}
     >
       {username ? (
         <>
           <Layout
             id="App"
-            className={theme === "light" ? "light" : "dark"}
+            className={currentTheme === "light" ? "light" : "dark"}
             style={{ height: "100%" }}
           >
             <Aside />

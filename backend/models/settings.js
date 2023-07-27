@@ -1,10 +1,13 @@
 const mongoose = require("mongoose");
 
 const settingSchema = new mongoose.Schema({
-  theme: {
+  defaultTheme: {
     type: String,
   },
-  itemview: {
+  defaultItemView: {
+    type: String,
+  },
+  lang: {
     type: String,
   },
 });

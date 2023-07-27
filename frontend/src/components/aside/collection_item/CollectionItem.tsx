@@ -1,5 +1,5 @@
 import { Typography } from "antd";
-import { setPage } from "../../../redux/reducers/aside";
+import { setPage } from "../../../redux/reducers/settings";
 import { useAppSelector, useAppDispatch } from "../../../redux/store";
 import { CollectionType } from "../../../types/types";
 import Avatar from "../../media/avatar/Avatar";
@@ -13,7 +13,7 @@ export default function CollectionItem({
   collection: CollectionType;
 }) {
   const dispatch = useAppDispatch();
-  const currentPage = useAppSelector((state) => state.aside.page);
+  const currentPage = useAppSelector((state) => state.settings.page);
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: collection._id });
@@ -26,13 +26,6 @@ export default function CollectionItem({
   function setCollectionPage(collectionId: string) {
     dispatch(setPage("collection-" + collectionId));
   }
-
-  const items = [
-    {
-      label: "Edit",
-      key: "1",
-    },
-  ];
 
   return (
     <li

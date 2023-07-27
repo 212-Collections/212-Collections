@@ -19,6 +19,7 @@ export default function CollectionPage({
 
   const { collection } = useAppSelector((state) => state.collection);
 
+
   useEffect(() => {
     dispatch(fetchCollection(collectionId));
   }, [collectionId, dispatch]);

@@ -20,7 +20,6 @@ function api(fastify, opts, next) {
         { $set: newSettings },
         { new: true, upsert: true }
       );
-      console.log(settingsSaved);
       reply.status(200).send(settingsSaved);
     } catch (error) {
       reply.status(500).send(error);

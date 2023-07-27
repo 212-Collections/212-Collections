@@ -1,18 +1,26 @@
 import { DeleteOutlined, EditOutlined, MoreOutlined } from "@ant-design/icons";
 import { Button, Dropdown, Popconfirm } from "antd";
-import {  useState } from "react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function Options({ editFunction, deleteFunction, type }: any) {
   const [confirmVisible, setConfirmVisible] = useState(false);
+  const { t } = useTranslation();
 
   const items = [
     {
-      label: "Edit collection",
+      label:
+        type === "item"
+          ? t("page.collection.item.edit")
+          : t("page.collection.edit"),
       key: "edit",
       icon: <EditOutlined />,
     },
     {
-      label: "Delete " + type,
+      label:
+        type === "item"
+          ? t("page.collection.item.delete")
+          : t("page.collection.delete"),
       key: "delete",
       danger: true,
       icon: <DeleteOutlined />,
@@ -43,11 +51,19 @@ export default function Options({ editFunction, deleteFunction, type }: any) {
         <Button style={{ flexShrink: 0 }} type="text" icon={<MoreOutlined />} />
       </Dropdown>
       <Popconfirm
-        title={"Delete " + type}
-        description={`Are you sure you want to delete this ${type}?`}
+        title={
+          type === "item"
+            ? t("page.collection.item.popup.title")
+            : t("page.collection.popup.title")
+        }
+        description={
+          type === "item"
+            ? t("page.collection.item.popup.message")
+            : t("page.collection.popup.message")
+        }
         onConfirm={() => deleteFunction()}
-        okText="Yes"
-        cancelText="No"
+        okText={t("global.popup.ok")}
+        cancelText={t("global.popup.cancel")}
         key="delete"
         open={confirmVisible}
         onCancel={() => setConfirmVisible(false)}

@@ -1,14 +1,21 @@
 import { Button, Divider, Form, Input, Layout, Space, Typography } from "antd";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
-import { getSavedAccounts, login, loginToken } from "../../redux/reducers/aside";
+import {
+  getSavedAccounts,
+  login,
+  loginToken,
+} from "../../redux/reducers/settings";
 import { useEffect, useState } from "react";
 import { accountType } from "../../types/types";
 import Account from "../../components/account/Account";
+import { useTranslation } from "react-i18next";
 
 export default function LoginPage() {
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
-  const accounts = useAppSelector(state => state.aside.accounts);
+  const accounts = useAppSelector((state) => state.settings.accounts);
+
+  const { t } = useTranslation();
 
   function submit(e: any) {
     let clusterValue = e.cluster;
@@ -34,7 +41,9 @@ export default function LoginPage() {
     >
       <Space style={{ alignItems: "flex-start" }} size={64}>
         <div>
-          <Typography.Title level={3}>New login</Typography.Title>
+          <Typography.Title level={3}>
+            {t("page.login.type.classic")}
+          </Typography.Title>
           <Form
             style={{ maxWidth: "520px", marginBottom: "16px" }}
             form={form}
@@ -45,11 +54,14 @@ export default function LoginPage() {
           >
             <Form.Item
               name="username"
-              label="Username"
+              label={t("page.login.form.username")}
               rules={[
                 {
                   required: true,
-                  message: "Username is required",
+                  message:
+                    t("page.login.form.username") +
+                    " " +
+                    t("global.form.required"),
                 },
               ]}
             >
@@ -57,11 +69,14 @@ export default function LoginPage() {
             </Form.Item>
             <Form.Item
               name="password"
-              label="Password"
+              label={t("page.login.form.password")}
               rules={[
                 {
                   required: true,
-                  message: "Password is required",
+                  message:
+                    t("page.login.form.password") +
+                    " " +
+                    t("global.form.required"),
                 },
               ]}
             >
@@ -69,11 +84,14 @@ export default function LoginPage() {
             </Form.Item>
             <Form.Item
               name="database"
-              label="Database name"
+              label={t("page.login.form.database")}
               rules={[
                 {
                   required: true,
-                  message: "Database name is required",
+                  message:
+                    t("page.login.form.database") +
+                    " " +
+                    t("global.form.required"),
                 },
               ]}
             >
@@ -81,37 +99,44 @@ export default function LoginPage() {
             </Form.Item>
             <Form.Item
               name="cluster"
-              label="Cluster"
+              label={t("page.login.form.cluster")}
               rules={[
                 {
                   required: true,
-                  message: "Cluster is required",
+                  message:
+                    t("page.login.form.cluster") +
+                    " " +
+                    t("global.form.required"),
                 },
               ]}
             >
               <Input addonAfter=".mongodb.net" allowClear />
             </Form.Item>
             <Button type="primary" onClick={() => form.submit()}>
-              Login
+              {t("page.login.form.submit")}
             </Button>
           </Form>
           <Typography.Link
             href="https://github.com/212-collections/212-collections/wiki/create-a-database"
             target="_blank"
           >
-            No account? Follow the instructions here
+            {t("page.login.guide")}
           </Typography.Link>
         </div>
-        {accounts.length> 0 ? <div>
-          <Typography.Title level={3}>Direct login</Typography.Title>
-          <ul>
-            {accounts.map((account, i) => (
-              <li key={i}>
-                <Account account={account} />
-              </li>
-            ))}
-          </ul>
-        </div> : null}
+        {accounts.length > 0 ? (
+          <div>
+            <Typography.Title level={3}>
+              {t("page.login.type.direct")}
+            </Typography.Title>
+            <ul>
+              {accounts.map((account, i) => (
+                <li key={i}>
+                  <Account account={account} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
       </Space>
     </Layout>
   );

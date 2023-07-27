@@ -23,10 +23,12 @@ import Image from "../../media/image/Image";
 import dayjs from "dayjs";
 import { AvatarType, ImageType } from "../../../types/types";
 import ImageModal from "../image_modal/ImageModal";
+import { useTranslation } from "react-i18next";
 
 export default function ItemModal({ collectionId }: { collectionId: string }) {
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const itemModal = useAppSelector((state) => state.modal.itemModal);
   const imageModalItem = useAppSelector((state) => state.modal.imageModalItem);
@@ -152,16 +154,12 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
       });
   }
 
-  // function deleteI() {
-  //   dispatch(deleteItem({ ...itemModal.data, collection_id: collectionId }));
-  // }
-
   const modalFooter = [
     <Button key="reset" danger onClick={() => form.resetFields()}>
-      Reset
+      {t("global.modal.reset")}
     </Button>,
     <Button key="cancel" onClick={cancel}>
-      Cancel
+      {t("global.modal.cancel")}
     </Button>,
     <Button
       key="submit"
@@ -169,14 +167,20 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
       onClick={() => form.submit()}
       icon={itemModal.loading ? <LoadingOutlined /> : null}
     >
-      {itemModal.type === "update" ? "Update" : "Create"}
+      {itemModal.type === "update"
+        ? t("global.modal.update")
+        : t("global.modal.create")}
     </Button>,
   ];
 
   return (
     <>
       <Modal
-        title={itemModal.type === "new" ? "New Item" : "Edit Item"}
+        title={
+          itemModal.type === "new"
+            ? t("modal.item.title.new")
+            : t("modal.item.title.edit")
+        }
         open={itemModal.open}
         onCancel={cancel}
         footer={modalFooter}
@@ -204,7 +208,7 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
                 }
                 style={{ width: "69px", height: "69px" }}
               >
-                Icon
+                {t("modal.item.form.icon.label")}
               </Button>
             ) : (
               <div
@@ -228,17 +232,25 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
             )}
             <Form.Item
               name="title"
-              label="Title"
+              label={t("modal.item.form.title.label")}
               rules={[
                 {
                   required: true,
-                  message: "Title is required",
+                  message:
+                    t("modal.item.form.title.label") +
+                    " " +
+                    t("global.form.required"),
                 },
               ]}
+              tooltip={t("modal.item.form.icon.tooltip")}
             >
               <Input maxLength={32} allowClear />
             </Form.Item>
-            <Form.Item name="version" label="Version">
+            <Form.Item
+              name="version"
+              label={t("modal.item.form.version.label")}
+              tooltip={t("modal.item.form.version.tooltip")}
+            >
               <Input maxLength={16} />
             </Form.Item>
           </div>
@@ -246,30 +258,41 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
           <div id="link">
             <Form.Item
               name="link"
-              label="Link"
-              tooltip="The link of the new item"
+              label={t("modal.item.form.link.label")}
+              tooltip={t("modal.item.form.link.tooltip")}
             >
               <Space.Compact style={{ width: "100%" }}>
                 <Input allowClear />
                 <Button icon={<DownloadOutlined />} onClick={getWebSiteData} />
               </Space.Compact>
             </Form.Item>
-            <Form.Item name="color1" label=" " tooltip="Color 1">
+            <Form.Item
+              name="color1"
+              label={t("modal.item.form.color1.label")}
+              tooltip={t("modal.item.form.color1.tooltip")}
+            >
               <ColorPicker />
             </Form.Item>
-            <Form.Item label=" " name="color2" tooltip="Color 2">
+            <Form.Item
+              name="color2"
+              label={t("modal.item.form.color2.label")}
+              tooltip={t("modal.item.form.color2.tooltip")}
+            >
               <ColorPicker />
             </Form.Item>
           </div>
 
           <Form.Item
             name="description"
-            label="Description"
-            tooltip="The description of the new item"
+            label={t("modal.item.form.description.label")}
+            tooltip={t("modal.item.form.description.tooltip")}
           >
             <Input.TextArea rows={3} />
           </Form.Item>
-          <Form.Item label="Image">
+          <Form.Item
+            label={t("modal.item.form.image.label")}
+            tooltip={t("modal.item.form.image.tooltip")}
+          >
             {imageData.data === null || imageData.data === "" ? (
               <Button
                 onClick={() =>
@@ -284,7 +307,7 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
                 }
                 style={{ width: "100%", height: "100px" }}
               >
-                Image
+                {t("modal.item.form.image.label")}
               </Button>
             ) : (
               <div
@@ -306,7 +329,11 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
             )}
           </Form.Item>
           <div id="footer">
-            <Form.Item name="tags" label="Tags">
+            <Form.Item
+              name="tags"
+              label={t("modal.item.form.tags.label")}
+              tooltip={t("modal.item.form.tags.tooltip")}
+            >
               <Select
                 mode="tags"
                 style={{
@@ -314,8 +341,12 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
                 }}
               />
             </Form.Item>
-            <Form.Item name="date" label="Date">
-              <DatePicker style={{ width: "100%" }} />
+            <Form.Item
+              name="date"
+              label={t("modal.item.form.date.label")}
+              tooltip={t("modal.item.form.date.tooltip")}
+            >
+              <DatePicker placeholder={""} style={{ width: "100%" }} />
             </Form.Item>
           </div>
         </Form>

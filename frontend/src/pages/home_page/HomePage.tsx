@@ -7,6 +7,7 @@ import {
   Layout,
   Select,
   Space,
+  Tag,
   Typography,
   theme,
 } from "antd";
@@ -14,15 +15,28 @@ import Icon from "../../components/media/icon/Icon";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { useEffect, useState } from "react";
 import Avatar from "../../components/media/avatar/Avatar";
-import { logout, saveSettings, setPage } from "../../redux/reducers/aside";
+import {
+  ThemeState,
+  logout,
+  saveSettings,
+  setLang,
+  setPage,
+} from "../../redux/reducers/settings";
+import i18n from "../../i18n";
+import { useTranslation } from "react-i18next";
+import Settings from "../../components/settings/Settings";
+import { DownloadOutlined, LoadingOutlined } from "@ant-design/icons";
 
 export default function HomePage() {
   const [collections, setCollections] = useState([]);
   const [size, setSize] = useState(0);
+  const [newRelease, setNewRelease] = useState(false);
+  const [latestRelease, setLatestRelease] = useState("");
+  const [loadingCheckRelease, setLoadingCheckRelease] = useState(false);
   const dispatch = useAppDispatch();
-  const [form] = Form.useForm();
-  const settings = useAppSelector((state) => state.aside.settings);
-  const username = useAppSelector((state) => state.aside.username);
+  const username = useAppSelector((state) => state.settings.username);
+  const { t } = useTranslation();
+  const packageData = require("../../../package.json");
 
   const {
     token: { colorBgContainer },
@@ -42,106 +56,33 @@ export default function HomePage() {
       });
   }, [username]);
 
-  useEffect(() => {
-    form.setFieldsValue(settings);
-  }, []);
-
   function setCollectionPage(collectionId: string) {
     dispatch(setPage("collection-" + collectionId));
   }
 
-  function handleChange() {
-    form.submit();
+  function checkRelease() {
+    setLoadingCheckRelease(true);
+    setNewRelease(false);
+    fetch(
+      "https://api.github.com/repos/212-collections/212-collections/releases"
+    )
+      .then((res) => res.json())
+      .then((arr) => {
+        setLoadingCheckRelease(false);
+        const latest = arr[0].tag_name;
+        setLatestRelease(latest);
+        if (latest !== packageData.version) {
+          setNewRelease(true);
+        }
+      });
   }
 
-  function submit(value: any) {
-    dispatch(saveSettings(value));
+  function openUpdate() {
+    window.open(
+      "https://github.com/212-Collections/212-Collections/releases/tag/" +
+        latestRelease
+    );
   }
-
-  const LightIcon = (
-    <span className="anticon" role="img">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="1em"
-        height="1em"
-        viewBox="0 0 24 24"
-        strokeWidth="1.5"
-        stroke="grid"
-        fill="none"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-        <path
-          d="M12 19a1 1 0 0 1 .993 .883l.007 .117v1a1 1 0 0 1 -1.993 .117l-.007 -.117v-1a1 1 0 0 1 1 -1z"
-          strokeWidth="0"
-          fill="currentColor"
-        />
-        <path
-          d="M18.313 16.91l.094 .083l.7 .7a1 1 0 0 1 -1.32 1.497l-.094 -.083l-.7 -.7a1 1 0 0 1 1.218 -1.567l.102 .07z"
-          strokeWidth="0"
-          fill="currentColor"
-        />
-        <path
-          d="M7.007 16.993a1 1 0 0 1 .083 1.32l-.083 .094l-.7 .7a1 1 0 0 1 -1.497 -1.32l.083 -.094l.7 -.7a1 1 0 0 1 1.414 0z"
-          strokeWidth="0"
-          fill="currentColor"
-        />
-        <path
-          d="M4 11a1 1 0 0 1 .117 1.993l-.117 .007h-1a1 1 0 0 1 -.117 -1.993l.117 -.007h1z"
-          strokeWidth="0"
-          fill="currentColor"
-        />
-        <path
-          d="M21 11a1 1 0 0 1 .117 1.993l-.117 .007h-1a1 1 0 0 1 -.117 -1.993l.117 -.007h1z"
-          strokeWidth="0"
-          fill="currentColor"
-        />
-        <path
-          d="M6.213 4.81l.094 .083l.7 .7a1 1 0 0 1 -1.32 1.497l-.094 -.083l-.7 -.7a1 1 0 0 1 1.217 -1.567l.102 .07z"
-          strokeWidth="0"
-          fill="currentColor"
-        />
-        <path
-          d="M19.107 4.893a1 1 0 0 1 .083 1.32l-.083 .094l-.7 .7a1 1 0 0 1 -1.497 -1.32l.083 -.094l.7 -.7a1 1 0 0 1 1.414 0z"
-          strokeWidth="0"
-          fill="currentColor"
-        />
-        <path
-          d="M12 2a1 1 0 0 1 .993 .883l.007 .117v1a1 1 0 0 1 -1.993 .117l-.007 -.117v-1a1 1 0 0 1 1 -1z"
-          strokeWidth="0"
-          fill="currentColor"
-        />
-        <path
-          d="M12 7a5 5 0 1 1 -4.995 5.217l-.005 -.217l.005 -.217a5 5 0 0 1 4.995 -4.783z"
-          strokeWidth="0"
-          fill="currentColor"
-        />
-      </svg>
-    </span>
-  );
-
-  const darkIcon = (
-    <span className="anticon" role="img">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        strokeWidth="1.5"
-        stroke="grid"
-        fill="none"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path
-          d="M12 1.992a10 10 0 1 0 9.236 13.838c.341 -.82 -.476 -1.644 -1.298 -1.31a6.5 6.5 0 0 1 -6.864 -10.787l.077 -.08c.551 -.63 .113 -1.653 -.758 -1.653h-.266l-.068 -.006l-.06 -.002z"
-          strokeWidth="0"
-          fill="currentColor"
-        />
-      </svg>
-    </span>
-  );
 
   const items = [
     // {
@@ -158,44 +99,47 @@ export default function HomePage() {
     //   ),
     // },
     {
-      key: "1",
-      label: "Settings",
+      key: 0,
+      label: t("page.home.tabs.about.title"),
       children: (
-        <Form form={form} layout="vertical" name={"settings"} onFinish={submit}>
-          <div style={{ display: "inline-block" }}>
-            <Form.Item name="theme" label="Default theme">
-              <Select onChange={handleChange}>
-                <Select.Option value="dark" label="Dark">
-                  <Space>
-                    {darkIcon}
-                    Dark
-                  </Space>
-                </Select.Option>
-                <Select.Option value="light" label="Light">
-                  <Space>
-                    {LightIcon}
-                    Light
-                  </Space>
-                </Select.Option>
-              </Select>
-            </Form.Item>
-            <Form.Item name="itemview" label="Default items view">
-              <Select onChange={handleChange}>
-                <Select.Option value="card" label="Card">
-                  <Space>Card</Space>
-                </Select.Option>
-                <Select.Option value="article" label="Article">
-                  <Space>Article</Space>
-                </Select.Option>
-              </Select>
-            </Form.Item>
+        <Space direction="vertical">
+          <div>
+            {t("page.home.tabs.about.version")} :{" "}
+            <Tag>{packageData.version}</Tag>
           </div>
-        </Form>
+          <Space>
+            <Button onClick={checkRelease}>
+              {t("page.home.tabs.about.check")}
+            </Button>
+            {loadingCheckRelease ? (
+              <>
+                <LoadingOutlined />
+              </>
+            ) : null}
+            {newRelease ? (
+              <>
+                <Typography.Text>
+                  {t("page.home.tabs.about.update")}
+                </Typography.Text>
+                <Button
+                  onClick={openUpdate}
+                  type="text"
+                  icon={<DownloadOutlined />}
+                />
+              </>
+            ) : null}
+          </Space>
+        </Space>
       ),
     },
     {
+      key: "1",
+      label: t("page.home.tabs.settings.title"),
+      children: <Settings />,
+    },
+    {
       key: "2",
-      label: "Collections overview",
+      label: t("page.home.tabs.overview.title"),
       children: (
         <Space style={{ flexWrap: "wrap" }}>
           {collections.length > 0
@@ -219,10 +163,12 @@ export default function HomePage() {
                       </Typography.Title>
                     </div>
                     <Typography.Text type="secondary" style={{ flexGrow: 1 }}>
-                      {collection.elementCount + " elements"}
+                      {collection.elementCount +
+                        " " +
+                        t("page.home.tabs.overview.element")}
                     </Typography.Text>
                     <Button onClick={() => setCollectionPage(collection._id)}>
-                      Open
+                      {t("page.home.tabs.overview.open")}
                     </Button>
                   </Space>
                 </Card>
@@ -241,11 +187,13 @@ export default function HomePage() {
     <>
       <header id="header" style={{ backgroundColor: colorBgContainer }}>
         <div style={{ alignItems: "baseline" }}>
-          <Typography.Title level={3}>Home</Typography.Title>
+          <Typography.Title level={3}>{t("page.home.title")}</Typography.Title>
           <Typography.Text>{size.toFixed(1)} MB / 512 MB</Typography.Text>
         </div>
         <div>
-          <Typography.Text>Connected as {username}</Typography.Text>
+          <Typography.Text>
+            {t("page.home.logged")} {username}
+          </Typography.Text>
           <Button
             type="default"
             icon={
@@ -269,7 +217,7 @@ export default function HomePage() {
             }
             onClick={disconnect}
           >
-            Logout
+            {t("page.home.logout")}
           </Button>
         </div>
       </header>
@@ -281,7 +229,7 @@ export default function HomePage() {
         }}
       />
       <Layout.Content style={{ overflowY: "auto" }}>
-        <Collapse defaultActiveKey={[1, 2]} ghost items={items} />
+        <Collapse defaultActiveKey={[0, 1, 2]} ghost items={items} />
       </Layout.Content>
     </>
   );

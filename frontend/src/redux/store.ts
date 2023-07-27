@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { ModalSlice } from "./reducers/modal";
-import { AsideSlice } from "./reducers/aside";
+import { SettingsSlice } from "./reducers/settings";
 import { CollectionListSlice } from "./reducers/list";
 import { MessageSlice } from "./reducers/message";
 import { CollectionSlice } from "./reducers/collection";
@@ -9,7 +9,7 @@ import { CollectionSlice } from "./reducers/collection";
 export const store = configureStore({
   reducer: {
     modal: ModalSlice.reducer,
-    aside: AsideSlice.reducer,
+    settings: SettingsSlice.reducer,
     list: CollectionListSlice.reducer,
     message: MessageSlice.reducer,
     collection: CollectionSlice.reducer,

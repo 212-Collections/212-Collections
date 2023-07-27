@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { setCollectionModal } from "./modal";
 import { setMessage } from "./message";
-import { setPage } from "./aside";
+import { setPage } from "./settings";
 import { CollectionType } from "../../types/types";
+import { useTranslation } from "react-i18next";
+import i18n from "../../i18n";
 interface CollectionList {
   collections: CollectionType[];
 }
@@ -34,8 +36,12 @@ export const saveCollection = createAsyncThunk(
       thunkAPI.dispatch(setCollectionModal({ open: false, loading: false }));
       thunkAPI.dispatch(
         setMessage({
-          title: "New collection",
-          description: "The new collection " + data.name + " has been created",
+          title:
+            i18n.t("message.item.new.success.title") +
+            " " +
+            i18n.t("message.item.type.collection"),
+          description:
+            data.name + " " + i18n.t("message.item.new.success.content"),
           type: "success",
         })
       );
@@ -44,7 +50,10 @@ export const saveCollection = createAsyncThunk(
       thunkAPI.dispatch(setCollectionModal({ loading: false }));
       thunkAPI.dispatch(
         setMessage({
-          title: "Error while creating new collection",
+          title:
+            i18n.t("message.item.new.error.title") +
+            " " +
+            i18n.t("message.item.type.collection"),
           description: data.message,
           type: "error",
         })
@@ -68,8 +77,12 @@ export const deleteCollection = createAsyncThunk(
       thunkAPI.dispatch(setCollectionModal({ open: false, loading: false }));
       thunkAPI.dispatch(
         setMessage({
-          title: "Delete item",
-          description: "The collection " + data.name + " has been deleted",
+          title:
+            i18n.t("message.item.delete.success.title") +
+            " " +
+            i18n.t("message.item.type.collection"),
+          description:
+            data.name + " " + i18n.t("message.item.delete.success.content"),
           type: "success",
         })
       );
@@ -79,7 +92,10 @@ export const deleteCollection = createAsyncThunk(
       thunkAPI.dispatch(setCollectionModal({ loading: false }));
       thunkAPI.dispatch(
         setMessage({
-          title: "Error while deleting collection",
+          title:
+            i18n.t("message.item.delete.error.title") +
+            " " +
+            i18n.t("message.item.type.collection"),
           description: data.message,
           type: "error",
         })
@@ -102,8 +118,11 @@ export const sortCollection = createAsyncThunk(
     if (data.length > 0) {
       thunkAPI.dispatch(
         setMessage({
-          title: "Sorted collections",
-          description: "Collections have been sorted",
+          title:
+            i18n.t("message.item.sort.success.title") +
+            " " +
+            i18n.t("message.item.type.collection"),
+          description: i18n.t("message.item.sort.success.content"),
           type: "success",
         })
       );
@@ -111,7 +130,10 @@ export const sortCollection = createAsyncThunk(
     } else {
       thunkAPI.dispatch(
         setMessage({
-          title: "Error while sorting collections",
+          title:
+            i18n.t("message.item.update.error.title") +
+            " " +
+            i18n.t("message.item.type.collection"),
           description: data.message,
           type: "error",
         })

@@ -6,18 +6,27 @@ import { ItemType } from "../../types/types";
 import ItemVoid from "../../components/item/item_void/ItemVoid";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import ItemCardSearch from "../../components/item/item_card_search/ItemCardSearch";
+import { useTranslation } from "react-i18next";
 
 export default function SearchPage() {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-  const options = ["title", "version", "link", "description", "tags"];
-  const [checkedList, setCheckedList] = useState<CheckboxValueType[]>(options);
+  const { t } = useTranslation();
+
+  const options = [
+    { label: t("modal.item.form.title.label"), value: "title" },
+    { label: t("modal.item.form.version.label"), value: "version" },
+    { label: t("modal.item.form.link.label"), value: "link" },
+    { label: t("modal.item.form.description.label"), value: "description" },
+    { label: t("modal.item.form.tags.label"), value: "tags" },
+  ];
+  const [checkedList, setCheckedList] = useState<any[]>(options.map((option) => option.value));
   const [indeterminate, setIndeterminate] = useState(false);
   const [checkAll, setCheckAll] = useState(true);
   const [result, setResult] = useState([]);
   const dispatch = useAppDispatch();
-  const selectedText = useAppSelector((state) => state.aside.selectedText);
+  const selectedText = useAppSelector((state) => state.settings.selectedText);
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -32,7 +41,7 @@ export default function SearchPage() {
     }
   }, [selectedText]);
 
-  const onSearch = (e:string) => {
+  const onSearch = (e: string) => {
     if (!e || checkedList.length === 0) return;
     setLoading(true);
     fetch("http://localhost:49449/search", {
@@ -59,7 +68,9 @@ export default function SearchPage() {
   };
 
   const onCheckAllChange = (e: CheckboxChangeEvent) => {
-    setCheckedList(e.target.checked ? options : []);
+    setCheckedList(
+      e.target.checked ? options.map((option) => option.value) : []
+    );
     setIndeterminate(false);
     setCheckAll(e.target.checked);
   };
@@ -94,7 +105,7 @@ export default function SearchPage() {
             onChange={onCheckAllChange}
             checked={checkAll}
           >
-            Check all
+            {t("page.search.check")}
           </Checkbox>
           <Checkbox.Group
             options={options}

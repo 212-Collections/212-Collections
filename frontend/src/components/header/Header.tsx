@@ -7,6 +7,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import Avatar from "../media/avatar/Avatar";
 import { deleteCollection } from "../../redux/reducers/list";
 import Options from "../item/components/Options";
+import { useTranslation } from "react-i18next";
 
 export default function Header({
   collection,
@@ -16,6 +17,7 @@ export default function Header({
   collectionId: string;
 }) {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const {
     token: { colorBgContainer },
@@ -65,19 +67,23 @@ export default function Header({
           onClick={openNewItemModal}
           icon={<PlusOutlined style={{ fontSize: "15px" }} />}
         >
-          New element
+          {t("page.collection.new")}
         </Button>
         <Select
           value={collection.view || "Select view"}
           onChange={handleUpdateCollection}
           options={[
             {
-              value: "antd-card",
-              label: "AntdCard",
+              value: "default",
+              label: t("page.home.tabs.settings.view.default"),
+            },
+            {
+              value: "card",
+              label: t("page.home.tabs.settings.view.card"),
             },
             {
               value: "article",
-              label: "Article",
+              label: t("page.home.tabs.settings.view.article"),
             },
           ]}
         />

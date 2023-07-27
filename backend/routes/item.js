@@ -119,7 +119,6 @@ function api(fastify, opts, next) {
   fastify.post("/search", async (request, reply) => {
     console.log("> Search");
     try {
-      console.log(request.body);
       const searchTerm = request.body.term;
       const searchFields = request.body.fields;
       const collections = await mongoose.connection.db.collections();

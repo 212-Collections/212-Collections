@@ -13,16 +13,20 @@ import collection, {
   updateCollection,
 } from "../../../redux/reducers/collection";
 import ImageModal from "../image_modal/ImageModal";
+import { useTranslation } from "react-i18next";
 
 export default function CollectionModal() {
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const collectionModal = useAppSelector(
     (state) => state.modal.collectionModal
   );
   const collections = useAppSelector((state) => state.list.collections);
-  const imageModalCollection = useAppSelector((state) => state.modal.imageModalCollection);
+  const imageModalCollection = useAppSelector(
+    (state) => state.modal.imageModalCollection
+  );
 
   const [avatarData, setAvatarData] = useState<AvatarType>({
     border: "rounded",
@@ -71,6 +75,7 @@ export default function CollectionModal() {
     const newCollection = {
       ...collection,
       icon: { ...avatarData },
+      view: "default",
       position: Math.max(...collections.map((c) => c.position || 0)) + 1,
     };
     try {
@@ -93,16 +98,18 @@ export default function CollectionModal() {
   return (
     <Modal
       title={
-        collectionModal.type === "new" ? "New Collection" : "Edit Collection"
+        collectionModal.type === "new"
+          ? t("modal.collection.title.new")
+          : t("modal.collection.title.edit")
       }
       open={collectionModal.open}
       onCancel={cancel}
       footer={[
         <Button key="reset" danger onClick={() => form.resetFields()}>
-          Reset
+          {t("global.modal.reset")}
         </Button>,
         <Button key="cancel" onClick={cancel}>
-          Cancel
+          {t("global.modal.cancel")}
         </Button>,
         <Button
           type="primary"
@@ -110,7 +117,9 @@ export default function CollectionModal() {
           onClick={() => form.submit()}
           icon={collectionModal.loading ? <LoadingOutlined /> : null}
         >
-          {collectionModal.type === "update" ? "Update" : "Create"}
+          {collectionModal.type === "update"
+            ? t("global.modal.update")
+            : t("global.modal.create")}
         </Button>,
       ]}
     >
@@ -135,7 +144,7 @@ export default function CollectionModal() {
               }
               style={{ width: "69px", height: "69px" }}
             >
-              Icon
+              {t("modal.collection.form.icon")}
             </Button>
           ) : (
             <div
@@ -156,11 +165,14 @@ export default function CollectionModal() {
           )}
           <Form.Item
             name="name"
-            label="Name"
+            label={t("modal.collection.form.name")}
             rules={[
               {
                 required: true,
-                message: "Name is required",
+                message:
+                  t("modal.collection.form.name") +
+                  " " +
+                  t("global.form.required"),
               },
             ]}
           >

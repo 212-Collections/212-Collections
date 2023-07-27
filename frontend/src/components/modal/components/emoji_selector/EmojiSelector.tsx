@@ -2,6 +2,7 @@ import { Button, Popover } from "antd";
 import data from "@emoji-mart/data/sets/14/twitter.json";
 import Picker from "@emoji-mart/react";
 import { useAppSelector } from "../../../../redux/store";
+import { useTranslation } from "react-i18next";
 
 interface EmojiSelectorProps {
   visible: boolean;
@@ -14,8 +15,8 @@ export default function EmojiSelector({
   setVisible,
   selectEmoji,
 }: EmojiSelectorProps) {
-  
-  const currentTheme = useAppSelector((state) => state.aside.theme);
+  const currentTheme = useAppSelector((state) => state.settings.currentTheme);
+  const { t } = useTranslation();
 
   return (
     <Popover
@@ -37,7 +38,7 @@ export default function EmojiSelector({
       }
     >
       <Button style={{ display: "block" }} type="primary">
-        Choose Emoji
+        {t("modal.image.menu.emoji.submit")}
       </Button>
     </Popover>
   );

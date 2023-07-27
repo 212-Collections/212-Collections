@@ -4,32 +4,31 @@ import { resetModalReducer } from "./modal";
 import { resetListReducer } from "./list";
 import { resetCollectionReducer } from "./collection";
 import { accountType } from "../../types/types";
+import i18n from "../../i18n";
+
+import { useTranslation } from "react-i18next";
 
 export type ThemeState = "light" | "dark";
 export type PageState = string;
 
-interface AsideType {
-  theme: ThemeState;
+interface SettingsType {
+  defaultTheme: ThemeState;
+  currentTheme: ThemeState;
   page: PageState;
   defaultItemView: string;
   username?: string | undefined;
-  settings: {
-    theme: ThemeState;
-    view: string;
-  };
   selectedText?: string;
   accounts: accountType[];
+  lang: string;
 }
 
-const initialState: AsideType = {
-  theme: "dark",
+const initialState: SettingsType = {
+  currentTheme: "dark",
+  defaultTheme: "dark",
   defaultItemView: "card",
   page: "home",
-  settings: {
-    theme: "dark",
-    view: "card",
-  },
   accounts: [],
+  lang: "en",
 };
 
 export const login = createAsyncThunk(
@@ -71,8 +70,8 @@ export const login = createAsyncThunk(
       localStorage.setItem(localStorageName, JSON.stringify(accounts));
       thunkAPI.dispatch(
         setMessage({
-          title: "Successfully authenticated",
-          description: "You are now logged as " + data.username,
+          title: i18n.t("message.login.success.title"),
+          description: i18n.t("message.login.success.content") + " " + data.username,
           type: "success",
         })
       );
@@ -80,7 +79,7 @@ export const login = createAsyncThunk(
     } else {
       thunkAPI.dispatch(
         setMessage({
-          title: "Error authenticating",
+          title: i18n.t("message.login.error.title"),
           description: data.message,
           type: "error",
         })
@@ -103,8 +102,8 @@ export const loginToken = createAsyncThunk(
     if (data.username) {
       thunkAPI.dispatch(
         setMessage({
-          title: "Successfully authenticated",
-          description: "You are now logged as " + data.username,
+          title: i18n.t("message.login.success.title"),
+          description: i18n.t("message.login.success.content") + " " + data.username,
           type: "success",
         })
       );
@@ -112,7 +111,7 @@ export const loginToken = createAsyncThunk(
     } else {
       thunkAPI.dispatch(
         setMessage({
-          title: "Error authenticating",
+          title: i18n.t("message.login.error.title"),
           description: data.message,
           type: "error",
         })
@@ -123,6 +122,11 @@ export const loginToken = createAsyncThunk(
 );
 
 export const logout = createAsyncThunk("logout", async (_, thunkAPI) => {
+  try {
+  } catch (error) {
+    console.log(error);
+  }
+
   const response = await fetch("http://localhost:49449/logout", {
     method: "POST",
   });
@@ -130,8 +134,8 @@ export const logout = createAsyncThunk("logout", async (_, thunkAPI) => {
   if (data.logout) {
     thunkAPI.dispatch(
       setMessage({
-        title: "Successfully logged out",
-        description: "You have successfully logged out",
+        title: i18n.t("message.logout.success.title"),
+        description: i18n.t("message.logout.success.content"),
         type: "success",
       })
     );
@@ -139,12 +143,12 @@ export const logout = createAsyncThunk("logout", async (_, thunkAPI) => {
     thunkAPI.dispatch(resetMessageReducer());
     thunkAPI.dispatch(resetListReducer());
     thunkAPI.dispatch(resetCollectionReducer());
-    thunkAPI.dispatch(resetAsideReducer());
+    thunkAPI.dispatch(resetSettingsReducer());
     return data;
   } else {
     thunkAPI.dispatch(
       setMessage({
-        title: "Error logging out",
+        title: i18n.t("message.logout.error.content"),
         description: data.message,
         type: "error",
       })
@@ -160,14 +164,16 @@ export const fetchSettings = createAsyncThunk(
       method: "GET",
     });
     const data = await response.json();
-    if (data.theme) {
-      thunkAPI.dispatch(setTheme(data.theme));
-      if (data.itemView) thunkAPI.dispatch(setDefaultItemView(data.itemView));
+    if (data.defaultTheme) {
+      thunkAPI.dispatch(setDefaultTheme(data.defaultTheme));
+      if (data.defaultItemView)
+        thunkAPI.dispatch(setDefaultItemView(data.defaultItemView));
+      if (data.lang) thunkAPI.dispatch(setLang(data.lang));
       return data;
     } else {
       thunkAPI.dispatch(
         setMessage({
-          title: "Error fetching settings",
+          title: i18n.t("message.settings.fetch.error.title"),
           description: data.message,
           type: "error",
         })
@@ -188,12 +194,12 @@ export const saveSettings = createAsyncThunk(
       body: JSON.stringify({ ...settings }),
     });
     const data = await response.json();
-    if (data.theme) {
+    if (data.defaultTheme) {
       return data;
     } else {
       thunkAPI.dispatch(
         setMessage({
-          title: "Error updating settings",
+          title: i18n.t("message.settings.update.error.title"),
           description: data.message,
           type: "error",
         })
@@ -203,15 +209,28 @@ export const saveSettings = createAsyncThunk(
   }
 );
 
-export const AsideSlice = createSlice({
-  name: "aside",
+export const SettingsSlice = createSlice({
+  name: "settings",
   initialState,
   reducers: {
-    setTheme: (state, action: PayloadAction<ThemeState>) => {
-      state.theme = action.payload;
+    setDefaultTheme: (state, action: PayloadAction<ThemeState>) => {
+      const theme = action.payload;
+      state.defaultTheme = theme;
+      localStorage.setItem("212-collections-theme", theme);
+      state.currentTheme = theme;
+    },
+    setCurrentTheme: (state, action: PayloadAction<ThemeState>) => {
+      const theme = action.payload;
+      state.currentTheme = theme;
     },
     setDefaultItemView: (state, action: PayloadAction<string>) => {
       state.defaultItemView = action.payload;
+    },
+    setLang: (state, action: PayloadAction<string>) => {
+      const lang = action.payload;
+      state.lang = lang;
+      localStorage.setItem("212-collections-lang", lang);
+      i18n.changeLanguage(lang);
     },
     setPage: (state, action: PayloadAction<string>) => {
       state.page = action.payload;
@@ -219,7 +238,7 @@ export const AsideSlice = createSlice({
     setUsername: (state, action: PayloadAction<string | undefined>) => {
       state.username = action.payload;
     },
-    resetAsideReducer: (state) => {
+    resetSettingsReducer: (state) => {
       state = initialState;
     },
     setSelectedText: (state, action) => {
@@ -268,7 +287,10 @@ export const AsideSlice = createSlice({
       fetchSettings.fulfilled,
       (state, action: PayloadAction<any>) => {
         if (action.payload) {
-          state.settings = action.payload;
+          const { defaultTheme, defaultItemView, lang } = action.payload;
+          state.defaultTheme = defaultTheme;
+          state.defaultItemView = defaultItemView;
+          state.lang = lang;
         }
       }
     );
@@ -277,26 +299,24 @@ export const AsideSlice = createSlice({
       (state, action: PayloadAction<any>) => {
         const data = action.payload;
         if (data) {
-          state.settings = {
-            ...state.settings,
-            theme: data.theme,
-            view: data.itemview,
-          };
-          state.theme = data.theme;
-          state.defaultItemView = data.itemview;
+          state.defaultTheme = data.defaultTheme;
+          state.defaultItemView = data.defaultItemView;
+          state.lang = data.lang;
         }
       }
     );
   },
 });
 
-export default AsideSlice.reducer;
+export default SettingsSlice.reducer;
 export const {
-  setTheme,
+  setCurrentTheme,
+  setDefaultTheme,
   setPage,
-  resetAsideReducer,
+  resetSettingsReducer,
   setDefaultItemView,
   setSelectedText,
   UnregisterAccount,
   getSavedAccounts,
-} = AsideSlice.actions;
+  setLang,
+} = SettingsSlice.actions;

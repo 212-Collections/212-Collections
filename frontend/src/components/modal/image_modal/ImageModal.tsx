@@ -24,6 +24,7 @@ import UploadButton from "../components/upload_button/UploadButton";
 import twemoji from "twemoji";
 import Avatar from "../../media/avatar/Avatar";
 import Image from "../../media/image/Image";
+import { useTranslation } from "react-i18next";
 
 const initImageData: ImageType | AvatarType = {
   border: "rounded",
@@ -61,6 +62,8 @@ export default function ImageModal({
 }) {
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
+
+  const { t } = useTranslation();
 
   const [modalData, setModalData] = useState<ModalDataType>(initModalData);
   const [imageData, setImageData] = useState<ImageType | AvatarType>(
@@ -175,7 +178,9 @@ export default function ImageModal({
   const modalTitle = (
     <>
       <PictureOutlined style={{ margin: "0 8px 0 4px" }} />
-      Edit {imageModal.type}
+      {imageModal.type === "avatar"
+        ? t("modal.image.title.icon")
+        : t("modal.image.title.image")}
     </>
   );
 
@@ -184,25 +189,25 @@ export default function ImageModal({
       case "base64":
         return {
           value: item,
-          label: "Upload",
+          label: t("modal.image.menu.upload.title"),
           icon: <PictureOutlined />,
         };
       case "url":
         return {
           value: item,
-          label: "From URL",
+          label: t("modal.image.menu.url.title"),
           icon: <CloudDownloadOutlined />,
         };
       case "emoji":
         return {
           value: item,
-          label: "Emoji",
+          label: t("modal.image.menu.emoji.title"),
           icon: <SmileOutlined />,
         };
       case "color":
         return {
           value: item,
-          label: "Color",
+          label: t("modal.image.menu.color.title"),
           icon: (
             <span className="anticon" role="img">
               <svg
@@ -235,10 +240,10 @@ export default function ImageModal({
 
   const modalFooter = [
     <Button key="reset" danger onClick={resetForm}>
-      Reset
+      {t("global.modal.reset")}
     </Button>,
     <Button key="cancel" onClick={cancelModal}>
-      Cancel
+      {t("global.modal.cancel")}
     </Button>,
     <Button
       key="submit"
@@ -246,7 +251,7 @@ export default function ImageModal({
       onClick={() => form.submit()}
       icon={imageModal.loading ? <LoadingOutlined /> : null}
     >
-      Create
+      {t("global.modal.create")}
     </Button>,
   ];
 
@@ -405,7 +410,7 @@ export default function ImageModal({
                     key={index}
                   >
                     <Input
-                      placeholder="URL"
+                      placeholder={t("modal.image.menu.url.placeholder")}
                       allowClear
                       value={modalData.url}
                       onChange={(e) =>
@@ -470,8 +475,8 @@ export default function ImageModal({
               <div style={{ flex: 1 }}>
                 <Form.Item
                   name="render"
-                  label="Render type"
-                  tooltip="The type of render"
+                  label={t("modal.image.form.render.title")}
+                  tooltip={t("modal.image.form.render.tooltip")}
                   initialValue="smooth"
                 >
                   <Select
@@ -491,13 +496,13 @@ export default function ImageModal({
                     <Select.Option value="pixelated" label="Pixelated">
                       <Space>
                         {pixelatedSVG}
-                        Pixelated
+                        {t("modal.image.form.render.pixelated")}
                       </Space>
                     </Select.Option>
                     <Select.Option value="smooth" label="Smooth">
                       <Space>
                         {smoothSVG}
-                        Smooth
+                        {t("modal.image.form.render.smooth")}
                       </Space>
                     </Select.Option>
                   </Select>
@@ -505,8 +510,8 @@ export default function ImageModal({
                 {imageModal.type !== "image" ? (
                   <Form.Item
                     name="border"
-                    label="Border type"
-                    tooltip="The type of border"
+                    label={t("modal.image.form.border.title")}
+                    tooltip={t("modal.image.form.border.tooltip")}
                     initialValue="rounded"
                   >
                     <Select
@@ -526,19 +531,19 @@ export default function ImageModal({
                       <Select.Option value="round" label="Round">
                         <Space>
                           {roundSVG}
-                          Round
+                          {t("modal.image.form.border.round")}
                         </Space>
                       </Select.Option>
                       <Select.Option value="rounded" label="Rounded">
                         <Space>
                           {roundedSVG}
-                          Rounded
+                          {t("modal.image.form.border.rounded")}
                         </Space>
                       </Select.Option>
                       <Select.Option value="square" label="Square">
                         <Space>
                           {squareSVG}
-                          Square
+                          {t("modal.image.form.border.square")}
                         </Space>
                       </Select.Option>
                     </Select>

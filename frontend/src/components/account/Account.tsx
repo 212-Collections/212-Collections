@@ -3,10 +3,12 @@ import { accountType } from "../../types/types";
 import { DeleteOutlined, LoginOutlined, UserOutlined } from "@ant-design/icons";
 import "./account.scss";
 import { useAppDispatch } from "../../redux/store";
-import { UnregisterAccount, loginToken } from "../../redux/reducers/aside";
+import { UnregisterAccount, loginToken } from "../../redux/reducers/settings";
+import { useTranslation } from "react-i18next";
 
 export default function Account({ account }: { account: accountType }) {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const { username, token, database, cluster } = account;
   function directLogin() {
@@ -22,11 +24,11 @@ export default function Account({ account }: { account: accountType }) {
       className="account"
       extra={
         <Popconfirm
-          title="Unregister the account"
-          description="Are you sure you want to unregister this account?"
+          title={t("page.login.popup.title")}
+          description={t("page.login.popup.message")}
           onConfirm={deleteAccount}
-          okText="Yes"
-          cancelText="No"
+          okText={t("global.popup.ok")}
+          cancelText={t("global.popup.cancel")}
         >
           <Button type="text" danger icon={<DeleteOutlined />} />
         </Popconfirm>

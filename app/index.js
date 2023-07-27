@@ -1,4 +1,4 @@
-const { app, BrowserWindow, dialog } = require("electron");
+const { app, BrowserWindow, dialog, shell } = require("electron");
 const { spawn } = require("child_process");
 let backendProcess;
 
@@ -6,19 +6,30 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 1200,
     height: 800,
-    // frame: false
   });
 
   win.setMenu(null);
+
+  let backPath;
+
+  if (app.isPackaged) {
+    backPath = "./resources/app/backend/server.js";
+  } else {
+    backPath = "./backend/server.js";
+  }
 
   win.loadFile("./frontend/loading.html");
 
   // win.webContents.openDevTools();
 
+  win.webContents.setWindowOpenHandler((details) => {
+    shell.openExternal(details.url);
+    return { action: "deny" };
+  });
+
   let ready = false;
 
-  // backendProcess = spawn("node", ["./backend/server.js"]);
-  backendProcess = spawn("node", ["./resources/app/backend/server.js"]);
+  backendProcess = spawn("node", [backPath]);
   backendProcess.stdout.on("data", (data) => {
     console.log(`Backend output : ${data}`);
     if (!ready) {
@@ -29,7 +40,6 @@ function createWindow() {
 
   backendProcess.stderr.on("data", (data) => {
     console.error(`Backend error : ${data}`);
-
     dialog.showMessageBox({
       type: "info",
       message: "!!!!!!!!! " + data.toString(),

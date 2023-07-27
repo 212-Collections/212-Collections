@@ -64,7 +64,6 @@ function api(fastify, opts, next) {
         reply.status(200).send({ message: "Error! Token was not provided." });
       }
       const decodedToken = jwt.verify(token, secret_key);
-      console.log(decodedToken.uri);
       await mongoose.connect(decodedToken.uri, { useNewUrlParser: true });
 
       reply.status(200).send({

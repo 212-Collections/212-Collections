@@ -7,6 +7,7 @@ import type {
   UploadFile,
   UploadProps,
 } from "antd/es/upload/interface";
+import { useTranslation } from "react-i18next";
 
 const getBase64 = (img: RcFile, callback: (url: string) => void) => {
   const reader = new FileReader();
@@ -47,6 +48,7 @@ export default function UploadButton({
       });
     }
   };
+  const { t } = useTranslation();
 
   const upload = (
     <Upload
@@ -59,7 +61,7 @@ export default function UploadButton({
       onRemove={() => setImageBase32("")}
     >
       <Button type="primary" icon={<UploadOutlined />}>
-        Click to Upload
+        {t("modal.image.menu.upload.submit")}
       </Button>
     </Upload>
   );

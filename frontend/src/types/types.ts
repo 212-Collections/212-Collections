@@ -17,7 +17,7 @@ export interface AvatarType {
 export interface CollectionType {
   _id: string;
   name: string;
-  view: "antd-card" | "article";
+  view: string;
   items: ItemType[];
   icon?: AvatarType;
   position?: number | undefined;

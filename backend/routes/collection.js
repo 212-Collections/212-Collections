@@ -85,6 +85,7 @@ function api(fastify, opts, next) {
         name: data.name.trim(),
         icon: data.icon,
         position: data.position,
+        view: data.view,
       });
       const collectionSaved = await collection.save();
       reply.status(200).send(collectionSaved);

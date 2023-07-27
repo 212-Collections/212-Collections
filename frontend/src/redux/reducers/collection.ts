@@ -3,6 +3,8 @@ import { setCollectionModal, setItemModal } from "./modal";
 import { setMessage } from "./message";
 import { CollectionType, ItemType } from "../../types/types";
 import { updateCollectionList } from "./list";
+import { useTranslation } from "react-i18next";
+import i18n from "../../i18n";
 
 const initialState: { collection: CollectionType } = {
   collection: { _id: "", name: "", view: "antd-card", items: [] },
@@ -46,8 +48,12 @@ export const saveItem = createAsyncThunk(
       thunkAPI.dispatch(setItemModal({ open: false, loading: false }));
       thunkAPI.dispatch(
         setMessage({
-          title: "New item",
-          description: "The new item " + data.title + " has been created",
+          title:
+            i18n.t("message.item.new.success.title") +
+            " " +
+            i18n.t("message.item.type.item"),
+          description:
+            data.title + " " + i18n.t("message.item.new.success.content"),
           type: "success",
         })
       );
@@ -56,7 +62,10 @@ export const saveItem = createAsyncThunk(
       thunkAPI.dispatch(setItemModal({ loading: false }));
       thunkAPI.dispatch(
         setMessage({
-          title: "Error while creating new item",
+          title:
+            i18n.t("message.item.error.title") +
+            " " +
+            i18n.t("message.item.type.item"),
           description: data.message,
           type: "error",
         })
@@ -81,8 +90,12 @@ export const updateItem = createAsyncThunk(
       thunkAPI.dispatch(setItemModal({ open: false, loading: false }));
       thunkAPI.dispatch(
         setMessage({
-          title: "Update item",
-          description: "The item " + data.title + " has been updated",
+          title:
+            i18n.t("message.item.update.success.title") +
+            " " +
+            i18n.t("message.item.type.item"),
+          description:
+            data.title + " " + i18n.t("message.item.update.success.content"),
           type: "success",
         })
       );
@@ -91,7 +104,10 @@ export const updateItem = createAsyncThunk(
       thunkAPI.dispatch(setItemModal({ loading: false }));
       thunkAPI.dispatch(
         setMessage({
-          title: "Error while updating item",
+          title:
+            i18n.t("message.item.update.error.title") +
+            " " +
+            i18n.t("message.item.type.item"),
           description: data.message,
           type: "error",
         })
@@ -116,8 +132,12 @@ export const deleteItem = createAsyncThunk(
       thunkAPI.dispatch(setItemModal({ open: false, loading: false }));
       thunkAPI.dispatch(
         setMessage({
-          title: "Delete item",
-          description: "The item " + data.title + " has been deleted",
+          title:
+            i18n.t("message.item.delete.success.title") +
+            " " +
+            i18n.t("message.item.type.item"),
+          description:
+            data.title + " " + i18n.t("message.item.delete.success.content"),
           type: "success",
         })
       );
@@ -126,7 +146,10 @@ export const deleteItem = createAsyncThunk(
       thunkAPI.dispatch(setItemModal({ loading: false }));
       thunkAPI.dispatch(
         setMessage({
-          title: "Error while deleting item",
+          title:
+            i18n.t("message.item.delete.error.title") +
+            " " +
+            i18n.t("message.item.type.item"),
           description: data.message,
           type: "error",
         })
@@ -154,8 +177,12 @@ export const updateCollection = createAsyncThunk(
       thunkAPI.dispatch(setCollectionModal({ open: false, loading: false }));
       thunkAPI.dispatch(
         setMessage({
-          title: "Update",
-          description: "The collection has been updated",
+          title:
+            i18n.t("message.item.update.success.title") +
+            " " +
+            i18n.t("message.item.type.collection"),
+          description:
+            data.name + " " + i18n.t("message.item.update.success.content"),
           type: "success",
         })
       );
@@ -165,7 +192,10 @@ export const updateCollection = createAsyncThunk(
       thunkAPI.dispatch(setCollectionModal({ loading: false }));
       thunkAPI.dispatch(
         setMessage({
-          title: "Error while updating collection",
+          title:
+            i18n.t("message.item.update.error.title") +
+            " " +
+            i18n.t("message.item.type.collection"),
           description: data.message,
           type: "error",
         })
