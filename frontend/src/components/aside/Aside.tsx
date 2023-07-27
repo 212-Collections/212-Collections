@@ -1,13 +1,13 @@
 import { Button, Divider, Layout, theme } from "antd";
 import { HomeOutlined, PlusOutlined } from "@ant-design/icons";
-import { setPage, setTheme } from "../../redux/reducers/aside";
+import { setCurrentTheme, setPage } from "../../redux/reducers/settings";
 import { useAppSelector, useAppDispatch } from "../../redux/store";
 import CollectionsList from "./collections_list/CollectionsList";
 import { setCollectionModal } from "../../redux/reducers/modal";
 
 export default function Aside() {
   const dispatch = useAppDispatch();
-  const currentTheme = useAppSelector((state) => state.aside.theme);
+  const currentTheme = useAppSelector((state) => state.settings.currentTheme);
 
   const {
     token: { colorBgContainer, colorFillQuaternary },
@@ -15,9 +15,9 @@ export default function Aside() {
 
   function switchTheme() {
     if (currentTheme === "dark") {
-      dispatch(setTheme("light"));
+      dispatch(setCurrentTheme("light"));
     } else {
-      dispatch(setTheme("dark"));
+      dispatch(setCurrentTheme("dark"));
     }
   }
 
@@ -155,7 +155,6 @@ export default function Aside() {
       style={{ backgroundColor: colorBgContainer }}
       id="aside"
     >
-      {" "}
       <div
         style={
           currentTheme === "dark"
@@ -190,7 +189,6 @@ export default function Aside() {
           />
         </div>
         <Divider style={{ marginTop: "0", marginBottom: "12px" }} />
-
         <CollectionsList />
       </div>
     </Layout.Sider>
