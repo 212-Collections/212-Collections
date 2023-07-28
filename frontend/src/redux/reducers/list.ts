@@ -3,7 +3,6 @@ import { setCollectionModal } from "./modal";
 import { setMessage } from "./message";
 import { setPage } from "./settings";
 import { CollectionType } from "../../types/types";
-import { useTranslation } from "react-i18next";
 import i18n from "../../i18n";
 interface CollectionList {
   collections: CollectionType[];

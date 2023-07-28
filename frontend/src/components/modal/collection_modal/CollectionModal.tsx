@@ -76,7 +76,10 @@ export default function CollectionModal() {
       ...collection,
       icon: { ...avatarData },
       view: "default",
-      position: Math.max(...collections.map((c) => c.position || 0)) + 1,
+      position:
+        collections.length >= 1
+          ? Math.max(...collections.map((c) => c.position || 0)) + 1
+          : 0,
     };
     try {
       let resultAction;

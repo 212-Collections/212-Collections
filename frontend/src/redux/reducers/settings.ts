@@ -58,7 +58,10 @@ export const login = createAsyncThunk(
       const localStorageName = "212-collections-accounts";
       var accounts = JSON.parse(localStorage.getItem(localStorageName) || "[]");
       var existingAccount = accounts.findIndex(
-        (acc: accountType) => acc.database === account.database
+        (acc: accountType) =>
+          acc.database === account.database &&
+          acc.username === account.username &&
+          acc.cluster === account.cluster
       );
       if (existingAccount !== -1) {
         accounts[existingAccount] = account;
@@ -69,7 +72,8 @@ export const login = createAsyncThunk(
       thunkAPI.dispatch(
         setMessage({
           title: i18n.t("message.login.success.title"),
-          description: i18n.t("message.login.success.content") + " " + data.username,
+          description:
+            i18n.t("message.login.success.content") + " " + data.username,
           type: "success",
         })
       );
@@ -101,7 +105,8 @@ export const loginToken = createAsyncThunk(
       thunkAPI.dispatch(
         setMessage({
           title: i18n.t("message.login.success.title"),
-          description: i18n.t("message.login.success.content") + " " + data.username,
+          description:
+            i18n.t("message.login.success.content") + " " + data.username,
           type: "success",
         })
       );
@@ -317,4 +322,5 @@ export const {
   UnregisterAccount,
   getSavedAccounts,
   setLang,
+  setUsername
 } = SettingsSlice.actions;
