@@ -10,7 +10,7 @@ import Aside from "./components/aside/Aside";
 import CollectionPage from "./pages/collection_page/CollectionPage";
 import LoginPage from "./pages/login_page/LoginPage";
 import HomePage from "./pages/home_page/HomePage";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import {
   ThemeState,
   fetchSettings,
@@ -21,27 +21,27 @@ import {
 } from "./redux/reducers/settings";
 import SearchPage from "./pages/search_page/SearchPage";
 
+const combineDarkTheme = {
+  ...darkTheme,
+  ...customDarkTheme,
+};
+
+const combineLightTheme = {
+  ...lightTheme,
+  ...customLightTheme,
+};
+
 export default function App() {
   const page = useAppSelector((state) => state.settings.page);
   const currentTheme = useAppSelector((state) => state.settings.currentTheme);
   const username = useAppSelector((state) => state.settings.username);
   const dispatch = useAppDispatch();
 
-  const combineDarkTheme = {
-    ...darkTheme,
-    ...customDarkTheme,
-  };
-
-  const combineLightTheme = {
-    ...lightTheme,
-    ...customLightTheme,
-  };
-
   useEffect(() => {
     if (username) {
       dispatch(fetchSettings());
     } else {
-      const lang = localStorage.getItem("212-collections-lang");
+      const lang = localStorage.getItem("212-collections-lang") as string;
       if (lang) {
         dispatch(setLang(lang));
       }
@@ -54,15 +54,27 @@ export default function App() {
     }
   }, [username]);
 
-  document.addEventListener("keydown", (event) => {
-    if (event.ctrlKey && event.key === "f") {
-      event.preventDefault();
-      const selection = window.getSelection();
-      const selectedText = selection ? selection.toString() : "";
-      dispatch(setSelectedText(selectedText));
-      dispatch(setPage("search"));
-    }
-  });
+  const handleCtrlF = useCallback(
+    (event: any) => {
+      if (event.ctrlKey && event.key === "f") {
+        event.preventDefault();
+        const selection = window.getSelection();
+        const selectedText = selection ? selection.toString() : "";
+        dispatch(setSelectedText(selectedText));
+        dispatch(setPage("search"));
+      }
+    },
+    [dispatch]
+  );
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleCtrlF);
+    return () => {
+      document.removeEventListener("keydown", handleCtrlF);
+    };
+  }, [handleCtrlF]);
+
+  const pageTokens = page.split("-");
 
   return (
     <ConfigProvider
@@ -81,8 +93,8 @@ export default function App() {
             <Layout>
               {page === "home" ? <HomePage /> : null}
               {page === "search" ? <SearchPage /> : null}
-              {page.split("-")[0] === "collection" ? (
-                <CollectionPage collectionId={page.split("-")[1]} />
+              {pageTokens[0] === "collection" ? (
+                <CollectionPage collectionId={pageTokens[1]} />
               ) : null}
             </Layout>
           </Layout>

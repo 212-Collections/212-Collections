@@ -6,8 +6,6 @@ import { resetCollectionReducer } from "./collection";
 import { accountType } from "../../types/types";
 import i18n from "../../i18n";
 
-import { useTranslation } from "react-i18next";
-
 export type ThemeState = "light" | "dark";
 export type PageState = string;
 
