@@ -37,7 +37,7 @@ A simple, intuitive software that allows you to create customized collections fo
 
 3. Install all the dependencies by running the following command:
    ```bash
-   npm i && run install-all
+   npm i && npm run install-all
    ```
 
 4. Build the application by running the following command:
