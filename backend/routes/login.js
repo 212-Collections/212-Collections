@@ -13,13 +13,13 @@ function api(fastify, opts, next) {
       const { username, password, cluster, database } = request.body;
       const uri =
         "mongodb+srv://" +
-        username +
+        username.trim() +
         ":" +
         password +
         "@" +
-        cluster +
+        cluster.trim() +
         "/" +
-        database +
+        database.trim() +
         "?retryWrites=true&w=majority";
       await mongoose.connect(uri, { useNewUrlParser: true }).then(() => {
         console.log("connected");
@@ -136,7 +136,7 @@ function api(fastify, opts, next) {
         link = [...icon[0].matchAll(/href=["']([\w.\/-]+)["']/gm)][0][1];
         if (!link.startsWith("http")) {
           link = url + "/" + link;
-          link = link.replace(/([^:])\/{2,}/g, '$1/');
+          link = link.replace(/([^:])\/{2,}/g, "$1/");
         }
       } else {
         link = null;

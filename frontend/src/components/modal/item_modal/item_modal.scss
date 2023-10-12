@@ -40,6 +40,10 @@
       }
       flex: 0;
     }
+
+    .ant-form-item .ant-form-item {
+      margin: 0;width: 100%;
+    }
   }
 
   #item_modal_title_help {

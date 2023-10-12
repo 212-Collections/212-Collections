@@ -155,7 +155,7 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
   }
 
   const modalFooter = [
-    <Button key="reset" danger onClick={() => form.resetFields()}>
+    <Button key="reset" danger onClick={reset}>
       {t("global.modal.reset")}
     </Button>,
     <Button key="cancel" onClick={cancel}>
@@ -257,12 +257,14 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
 
           <div id="link">
             <Form.Item
-              name="link"
+              name={"url"}
               label={t("modal.item.form.link.label")}
               tooltip={t("modal.item.form.link.tooltip")}
             >
               <Space.Compact style={{ width: "100%" }}>
-                <Input allowClear />
+                <Form.Item name={"link"}>
+                  <Input allowClear />
+                </Form.Item>
                 <Button icon={<DownloadOutlined />} onClick={getWebSiteData} />
               </Space.Compact>
             </Form.Item>
