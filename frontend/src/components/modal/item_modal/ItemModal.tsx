@@ -24,6 +24,7 @@ import dayjs from "dayjs";
 import { AvatarType, ImageType } from "../../../types/types";
 import ImageModal from "../image_modal/ImageModal";
 import { useTranslation } from "react-i18next";
+import { setMessage } from "../../../redux/reducers/message";
 
 export default function ItemModal({ collectionId }: { collectionId: string }) {
   const [form] = Form.useForm();
@@ -72,7 +73,7 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
       setImageData(image);
       setAvatarData(icon);
     } else {
-      reset();
+      // reset();
     }
   }, [itemModal]);
 
@@ -134,6 +135,17 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
     })
       .then((response) => response.json())
       .then((data) => {
+        if (data.error) {
+          dispatch(
+            setMessage({
+              title:data.error,
+              description: data.message,
+              type: "error",
+            })
+          );
+        }
+        console.log(data);
+        
         form.setFieldsValue({
           title: data.title,
           description: data.description,

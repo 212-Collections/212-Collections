@@ -99,56 +99,96 @@ function api(fastify, opts, next) {
     console.log("> Get web data");
     try {
       const { url } = request.body;
+      const baseUrl = new URL(url).origin;
+
       const response = await axios.get(url);
-      const html = response.data;
-      function extractMetaTag(metaName) {
-        const regex = new RegExp(
-          `<meta[^>]*property=["']${metaName}["'][^>]*content=["']([^"']+)["']`,
-          "i"
-        );
-        const match = html.match(regex);
+
+      const headRegexp = /<head\b[^>]*>(.*?)<\/head>/is;
+      const headHtml = headRegexp.exec(response.data)[1] || "";
+
+      const hrefRegexp = /href=["']([^"']+)["']/gm;
+
+      const iconRegexps = [
+        // Apple icon avec taille
+        /<link[^>]*rel=["'](?:apple-touch-icon|apple-touch-icon-precomposed)["'][^>]*sizes=["'](\d+)x(?:\d+)["'][^>]*>/gm,
+        // Apple icon sans taille
+        /<link[^>]*rel=["'](?:apple-touch-icon|apple-touch-icon-precomposed)["'][^>]*>/gm,
+        // Icon classique avec taille
+        /<link[^>]*rel=["'](?:icon|shortcut icon)["'][^>]*sizes=["'](\d+)x(\d+)["'][^>]*>/gm,
+        // Icon classique sans taille
+        /<link[^>]*rel=["'](?:icon|shortcut icon)["'][^>]*>/gm,
+      ];
+
+      function updateImageURL(currentURL) {
+        let updatedURL = currentURL;
+        if (!currentURL.startsWith("http")) {
+          if (currentURL.startsWith("/")) {
+            updatedURL = baseUrl + currentURL;
+          } else if (currentURL.startsWith("./")) {
+            const relativePath = currentURL.replace(/^(\.\/)+/, "");
+            updatedURL = url + "/" + relativePath;
+          } else {
+            updatedURL = url + "/" + currentURL;
+          }
+          updatedURL = updatedURL.replace(/([^:])\/{2,}/g, "$1/");
+        }
+        return updatedURL;
+      }
+
+      function extractTag(tag, name) {
+        let regexp;
+        if (tag === "meta") {
+          regexp = new RegExp(
+            `<${tag}[^>]*(?:property|name)=["']${name}["'][^>]*content=["']([^>]+)["']`,
+            "i"
+          );
+        } else {
+          regexp = new RegExp(`<${tag}>(.+)<\/${tag}>`, "i");
+        }
+
+        let match = headHtml.match(regexp);
         return match ? match[1] : null;
       }
 
+      function extractIcon(regExp) {
+        return Array.from(headHtml.matchAll(regExp), (match) => {
+          return { match: match[0], size: Math.floor(match[1]) || 0 };
+        }).sort((m1, m2) => m2.size - m1.size);
+      }
+
       let icons = [];
-      let regex;
 
-      regex =
-        /<link[^>]*rel=["']apple-touch-icon["'][^>]*(?:sizes=["'](\d+)x(?:\d+)["'][^>])*>/gm;
-      icons = [...html.matchAll(regex)].sort((m1, m2) => m2[1] - m1[1]);
-
-      if (icons.length <= 0) {
-        regex =
-          /<link[^>]*rel=["']icon["'][^>]*sizes=["'](\d+)x(\d+)["'][^>]*>/gm;
-        icons = [...html.matchAll(regex)].sort((m1, m2) => m2[1] - m1[1]);
+      for (const iconRegExp of iconRegexps) {
+        icons.push(...extractIcon(iconRegExp));
+        if (icons.length > 0) break;
       }
 
-      if (icons.length <= 0) {
-        regex = /<link[^>]*rel=["']icon["'][^>]*>/gm;
-        icons = [...html.matchAll(regex)];
+      let iconURL = null;
+      const selectedIcon = icons[0];
+      if (selectedIcon) {
+        const selectedIconURL = hrefRegexp.exec(selectedIcon.match)[1];
+        iconURL = updateImageURL(selectedIconURL);
       }
 
-      const target = 64;
-      let link;
-
-      if (icons[0]) {
-        let icon = icons[0];
-        link = [...icon[0].matchAll(/href=["']([\w.\/-]+)["']/gm)][0][1];
-        if (!link.startsWith("http")) {
-          link = url + "/" + link;
-          link = link.replace(/([^:])\/{2,}/g, "$1/");
-        }
-      } else {
-        link = null;
+      let imageURL = extractTag("meta", "og:image");
+      if (imageURL) {
+        imageURL = updateImageURL(imageURL);
       }
 
-      const ogData = {
-        title: extractMetaTag("og:title"),
-        description: extractMetaTag("og:description"),
-        image: extractMetaTag("og:image"),
-        icon: link,
+      const title = extractTag("meta", "og:title") || extractTag("title");
+
+      const description =
+        extractTag("meta", "og:description") ||
+        extractTag("meta", "description");
+
+      const data = {
+        title: title,
+        description: description,
+        image: imageURL,
+        icon: iconURL,
       };
-      reply.status(500).send(ogData);
+
+      reply.status(500).send(data);
     } catch (error) {
       console.log(error);
       reply.status(500).send(error);
