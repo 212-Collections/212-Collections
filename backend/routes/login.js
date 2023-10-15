@@ -151,9 +151,10 @@ function api(fastify, opts, next) {
       }
 
       function extractIcon(regExp) {
-        return Array.from(headHtml.matchAll(regExp), (match) => {
+        const result = Array.from(headHtml.matchAll(regExp), (match) => {
           return { match: match[0], size: Math.floor(match[1]) || 0 };
         }).sort((m1, m2) => m2.size - m1.size);
+        return result
       }
 
       let icons = [];
