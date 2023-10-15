@@ -50,7 +50,7 @@ export default function Options({ editFunction, deleteFunction, type }: any) {
       >
         <Button style={{ flexShrink: 0 }} type="text" icon={<MoreOutlined />} />
       </Dropdown>
-      <Popconfirm
+      { confirmVisible ? <Popconfirm
         title={
           type === "item"
             ? t("page.collection.item.popup.title")
@@ -67,7 +67,7 @@ export default function Options({ editFunction, deleteFunction, type }: any) {
         key="delete"
         open={confirmVisible}
         onCancel={() => setConfirmVisible(false)}
-      />
+      /> : null }
     </>
   );
 }

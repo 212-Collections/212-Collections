@@ -22,18 +22,22 @@ export default function Title({
       <Typography.Title
         ellipsis
         level={3}
-        style={{ flex: "auto", margin: 0, flexGrow: 0 }}
+        style={{ flex: "auto", margin: 0, flexGrow: 1 }}
       >
         {title}
       </Typography.Title>
-      <Typography.Text type="secondary" style={{ flexGrow: 1 }}>
-        {version}
-      </Typography.Text>
-      {editFunction && deleteFunction ? <Options
-        editFunction={editFunction}
-        deleteFunction={deleteFunction}
-        type="item"
-      /> : null}
+      {version && version !== "" ? (
+        <Typography.Text type="secondary" style={{ flexGrow: 1 }}>
+          {version}
+        </Typography.Text>
+      ) : null}
+      {editFunction && deleteFunction ? (
+        <Options
+          editFunction={editFunction}
+          deleteFunction={deleteFunction}
+          type="item"
+        />
+      ) : null}
     </div>
   );
 }
