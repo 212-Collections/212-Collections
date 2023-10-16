@@ -18,7 +18,7 @@ export default function ItemsList({
     collection.view === "default" ? defaultItemView : collection.view;
 
   return (
-    <ul className={collection.view === "card" ? "flex" : ""}>
+    <ul className={view === "card" ? "flex" : ""}>
       {collection.items.map((item: ItemType) => (
         <li key={item._id}>
           {view === "card" ? (
