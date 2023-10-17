@@ -122,7 +122,9 @@ function api(fastify, opts, next) {
       function updateImageURL(currentURL) {
         let updatedURL = currentURL;
         if (!currentURL.startsWith("http")) {
-          if (currentURL.startsWith("/")) {
+          if (currentURL.startsWith("//")) {
+            updatedURL = currentURL.replace(/^(\/\/)+/, "https://");
+          } else if (currentURL.startsWith("/")) {
             updatedURL = baseUrl + currentURL;
           } else if (currentURL.startsWith("./")) {
             const relativePath = currentURL.replace(/^(\.\/)+/, "");
@@ -154,7 +156,7 @@ function api(fastify, opts, next) {
         const result = Array.from(headHtml.matchAll(regExp), (match) => {
           return { match: match[0], size: Math.floor(match[1]) || 0 };
         }).sort((m1, m2) => m2.size - m1.size);
-        return result
+        return result;
       }
 
       let icons = [];

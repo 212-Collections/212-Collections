@@ -19,6 +19,11 @@ export default function Avatar({
     />
   );
 
+  
+  let backgroundColor = "#" + image.background;
+  if (!image.background) backgroundColor = "#00000000";
+
+
   return (
     <div
       className={`avatar ${image.type} ${
@@ -30,7 +35,12 @@ export default function Avatar({
           ? image.border
           : ""
       }`}
-      style={{ width: size || "100px", height: size || "100px", flexShrink: 0 }}
+      style={{
+        width: size || "100px",
+        height: size || "100px",
+        flexShrink: 0,
+        backgroundColor: backgroundColor,
+      }}
     >
       {image.type === "base64" ? img : null}
       {image.type === "url" ? img : null}

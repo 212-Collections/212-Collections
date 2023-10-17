@@ -15,7 +15,10 @@ export default function Image({
   sizeType = "width",
 }: PropsType) {
   if (!image || !image.data || image.data === "") return null;
-  const { render, data } = image;
+  const { render, data, background } = image;
+
+  let backgroundColor = "#" + background;
+  if (!background) backgroundColor = "#00000000";
 
   return (
     <ImageAntd
@@ -26,6 +29,9 @@ export default function Image({
       preview={preview}
       fallback="https://raw.githubusercontent.com/212-Collections/Branding/main/resources/no_image.svg"
       alt="avatar"
+      style={{
+        backgroundColor: backgroundColor,
+      }}
     />
   );
 }

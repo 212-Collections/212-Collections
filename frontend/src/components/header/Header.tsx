@@ -55,6 +55,7 @@ export default function Header({
               type: "color",
               border: "rounded",
               render: "smooth",
+              background: "#00000000",
               data: "#474b53",
             }
           }

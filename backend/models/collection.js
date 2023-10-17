@@ -19,6 +19,9 @@ const collectionSchema = new mongoose.Schema({
     render: {
       type: String,
     },
+    background: {
+      type: String,
+    },
     type: {
       type: String,
     },

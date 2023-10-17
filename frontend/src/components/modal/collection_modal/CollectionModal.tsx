@@ -32,6 +32,7 @@ export default function CollectionModal() {
     border: "rounded",
     render: "smooth",
     type: "base64",
+    background: "#00000000",
     data: "",
   });
 
@@ -65,6 +66,7 @@ export default function CollectionModal() {
     setAvatarData({
       border: "rounded",
       render: "smooth",
+      background: "#00000000",
       type: "base64",
       data: "",
     });

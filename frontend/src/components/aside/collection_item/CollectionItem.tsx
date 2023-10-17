@@ -47,6 +47,7 @@ export default function CollectionItem({
               type: "color",
               border: "rounded",
               render: "smooth",
+              background: "#00000000",
               data: "#474b53",
             }
           }

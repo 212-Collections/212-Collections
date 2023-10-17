@@ -30,6 +30,7 @@ const initImageData: ImageType | AvatarType = {
   border: "rounded",
   render: "smooth",
   type: "base64",
+  background: "#00000000",
   data: "",
 };
 
@@ -103,6 +104,7 @@ export default function ImageModal({
         form.setFieldValue("border", init.border);
       }
       form.setFieldValue("render", init.render);
+      form.setFieldValue("background", init.background);
       form.setFieldValue("link", type === "url" ? data : "");
       form.setFieldValue("color", type === "color" ? data : "");
     }
@@ -113,6 +115,7 @@ export default function ImageModal({
       const type = modalData.type;
       const data = modalData[type as UploadType];
       const render = imageModal.imageInit?.render || "smooth";
+      const background = imageModal.imageInit?.background || "#00000000";
       const border =
         imageModal.imageInit && "border" in imageModal.imageInit
           ? imageModal.imageInit.border
@@ -122,6 +125,7 @@ export default function ImageModal({
         type,
         data,
         render,
+        background,
         border,
       };
     });
@@ -549,6 +553,42 @@ export default function ImageModal({
                     </Select>
                   </Form.Item>
                 ) : null}
+
+                <Form.Item
+                  name="background-color"
+                  label={t("modal.image.form.background.title")}
+                  tooltip={t("modal.image.form.background.tooltip")}
+                  initialValue="#00000000"
+                >
+                  <Space style={{ width: "100%", gap: "8px" }}>
+                    <Form.Item name={"background"}>
+                      <Input
+                        allowClear
+                        width={"100%"}
+                        value={imageData.background}
+                        addonBefore="#"
+                        onChange={(value) =>
+                          setImageData((data: AvatarType | ImageType) => {
+                            return { ...data, background: value.target.value };
+                          })
+                        }
+                      />
+                    </Form.Item>
+
+                    <ColorPicker
+                      format="hex"
+                      placement="bottom"
+                      value={imageData.background}
+                      onChange={(value) => {
+                        const color = value.toHex();
+                        setImageData((data: AvatarType | ImageType) => {
+                          return { ...data, background: color };
+                        });
+                        form.setFieldValue("background", color);
+                      }}
+                    />
+                  </Space>
+                </Form.Item>
               </div>
               <div style={{ flex: 1 }}>
                 {imageModal.type === "avatar" ? (

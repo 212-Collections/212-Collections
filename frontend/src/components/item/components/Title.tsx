@@ -9,6 +9,8 @@ export default function Title({
   deleteFunction,
   image,
 }: any) {
+  const titleGrow = version && version !== "" ? 0 : 1;
+
   return (
     <div
       style={{
@@ -22,7 +24,7 @@ export default function Title({
       <Typography.Title
         ellipsis
         level={3}
-        style={{ flex: "auto", margin: 0, flexGrow: 1 }}
+        style={{ margin: 0, flexGrow: titleGrow, flexShrink: 1 }}
       >
         {title}
       </Typography.Title>

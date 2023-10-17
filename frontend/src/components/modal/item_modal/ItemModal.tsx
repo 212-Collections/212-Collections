@@ -79,6 +79,7 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
 
   function cancel() {
     dispatch(setItemModal({ open: false }));
+    reset();
   }
   // OK
   async function submit(item: any) {
@@ -114,12 +115,14 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
     setImageData({
       render: "smooth",
       type: "base64",
+      background: "#00000000",
       data: "",
     });
     setAvatarData({
       border: "rounded",
       render: "smooth",
       type: "base64",
+      background: "#00000000",
       data: "",
     });
   }
@@ -138,14 +141,13 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
         if (data.error) {
           dispatch(
             setMessage({
-              title:data.error,
+              title: data.error,
               description: data.message,
               type: "error",
             })
           );
         }
-        console.log(data);
-        
+
         form.setFieldsValue({
           title: data.title,
           description: data.description,
@@ -154,6 +156,7 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
           setAvatarData({
             border: "rounded",
             render: "smooth",
+            background: "#00000000",
             data: data.icon,
             type: "url",
           });
@@ -161,6 +164,7 @@ export default function ItemModal({ collectionId }: { collectionId: string }) {
           setImageData({
             render: "smooth",
             data: data.image,
+            background: "#00000000",
             type: "url",
           });
       });

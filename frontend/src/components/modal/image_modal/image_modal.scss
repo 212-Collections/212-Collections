@@ -11,6 +11,13 @@
       }
     }
   }
+
+  .ant-form-item .ant-form-item {
+    margin: 0;width: 100%;
+  }
+  #image_modal_item_background-color > div:first-child {
+    flex: 1;
+  }
 }
 
 @import url("../components/emoji_selector/emoji_selector.scss");
